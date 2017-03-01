@@ -1,0 +1,960 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Simple Rapid API</title>
+    <style>
+        /*canvas {*/
+        /*    background: rgb(54, 75, 85);*/
+        /*    border: 1px;*/
+        /*    margin-bottom: 1em;*/
+        /*}*/
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+        }
+
+        /*canvas {*/
+        /*    position: fixed;*/
+        /*    width: 100%;*/
+        /*    height: 100%;*/
+        /*    top: 0;*/
+        /*    left: 0;*/
+        /*    z-index: -1;*/
+        /*}*/
+
+        #output {
+            font-size: 66px;
+            color: #005d98;
+            text-align: left;
+            position: fixed;
+            bottom: 18px;
+        }
+
+        #container_leap_protocol {
+            margin: 0 20 0 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 5%;
+            left: 30%;
+            z-index: 1;
+        }
+
+        #container_leap_controls {
+            margin: 0 20 0 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 20%;
+            left: 0;
+            z-index: 1;
+        }
+
+        #container_machine_learning_controls {
+            margin: 0 20 0 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 30%;
+            left: 0;
+            z-index: 1;
+        }
+
+        #container_audio_controls {
+            margin: 0 20 0 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 40%;
+            left: 0;
+            z-index: 1;
+        }
+        /*#progress {*/
+        /*	background: #005d98;*/
+        /*	position: fixed;*/
+        /*	bottom: 0;*/
+        /*	left: 0;*/
+        /*	height: 16px;*/
+        /*	width: 0%;*/
+        /*}*/
+        /*svg {*/
+        /*	display: block;*/
+        /*}*/
+        /*#controls {*/
+        /*	margin: auto;*/
+        /*	position: absolute;*/
+        /*	width: 100%;*/
+        /*	height: 100%;*/
+        /*	top: 80%;*/
+        /*	left: 0;*/
+        /*	z-index: 1;*/
+        /*}*/
+        /*#buttons_container {*/
+        /*	margin: 20 20 20 20;*/
+        /*	width: 100%;*/
+        /*}*/
+        /*#chart,*/
+        /*svg {*/
+        /*	margin: 0px;*/
+        /*	padding: 0px;*/
+        /*	height: 50%;*/
+        /*	width: 50%;*/
+        /*}*/
+    </style>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://www.doc.gold.ac.uk/~fbern010/noUiSlider/nouislider.min.css">
+    <script src="https://www.doc.gold.ac.uk/~fbern010/noUiSlider/nouislider.min.js"></script>
+
+</head>
+
+<body>
+    <!-- The Canvas tag sets up a screen in the browser that we can draw to. -->
+    <canvas></canvas>
+
+    <div id="container_leap_protocol">
+        <h5>LeapMotion Protocol</h5>
+        <div id="main">
+            <h6>Frame data:</h6>
+            <div id="frameData"></div>
+            <div style="clear:both;"></div>
+            <br>
+            <h6>Hand data:</h6>
+            <div id="handData"></div>
+            <div style="clear:both;"></div>
+            <br>
+            <h6>Finger data:</h6>
+            <div id="pointableData"></div>
+            <div style="clear:both;"></div>
+        </div>
+    </div>
+
+    <div id="container_leap_controls">
+        <h4>Leap Controls</h4>
+        <div id="slider"></div>
+        <div id="buttons_container">
+            <div class="btn-group btn-group-lg dropup">
+                <button id="record" type="button" class="btn btn-secondary" onclick="onRecordClick()">
+                     <i class="glyphicon glyphicon-record" ng-class="{orangerecordPending(), red: recording()}"></i>
+                     <span class="hotkey">R</span>ecord
+                 </button>
+                <button id="crop" type="button" class="btn btn-secondary" onclick="onCropClick()">
+                     <span style="margin-top: -2px; display: inline-block;     vertical-align: top;">[ ]</span>
+                     <span class="hotkey">C</span>rop
+                 </button>
+
+                <button style="text-align:left" type="button" class="btn btn-secondary" onclick="onPlayClick()">
+                     <span>&#9654;</span>
+                     <span><i class="glyphicon glyphicon-pause"></i>
+                     </span>
+                     <span class="hotkey">P</span>layback
+                 </button>
+            </div>
+            <div class="btn-group btn-group-lg dropup">
+                <button type="button" class="btn btn-secondary" ng-click="save()">Upload</button>
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                                   <span class="caret"></span>
+                              </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="#" onclick="save()"><b>Compressed</b></a>
+                    </li>
+                    <li>
+                        <a href="#" ng-click="save('json')">As JSON</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="container_machine_learning_controls">
+        <h4>Machine Learning parameters</h4>
+        <div class="btn-group btn-group-lg dropup">
+            <button id="mlRecord" type="button" class="btn btn-secondary" onclick=" togRecord()">
+                     <i class="glyphicon glyphicon-record" ng-class="{orangerecordPending(), red: recording()}"></i>
+                     <span class="hotkey">R</span>ecord
+                 </button>
+            <button id="train" style="text-align:left" type="button" class="btn btn-secondary" onclick="trainMe()">
+                     <span>&#9654;</span>
+                     <span><i class="glyphicon glyphicon-pause"></i>
+                     </span>
+                     <span class="hotkey">T</span>rain
+                 </button>
+            <button id="run" type="button" class="btn btn-secondary" onclick="togRun()">
+                     <span style="margin-top: -2px; display: inline-block;     vertical-align: top;">[ ]</span>
+                     <span class="hotkey">R</span>un
+                 </button>
+        </div>
+    </div>
+
+    <div id="container_audio_controls">
+        <div id="container_master_controls">
+            <h4>Audio Controls</h4>
+            <div>
+                <label for="mvSlider">master volume:</label>
+                <input id="mvSlider" name="mvSlider" min="0" max="1" step="0.01" value="1" type="range" autocomplete="off" oninput="mvOutput.value = mvSlider.value">
+                <output id="mvOutput">0.25</output>
+            </div>
+        </div>
+        <br>
+        <div id="container_sampler_controls">
+            <h5>Synth Controls</h5>
+            <div>
+                <label for="cfSlider">frequency:</label>
+                <input id="cfSlider" name="cfSlider" min="70" max="180" step="0.5" value="146" type="range" autocomplete="off" oninput="cfOutput.value = cfSlider.value">
+                <output id="cfOutput">146</output>
+            </div>
+            <div>
+                <label for="lfoSlider">lfo rate:</label>
+                <input id="lfoSlider" name="lfoSlider" min="0" max="10" step="0.1" value="4" type="range" autocomplete="off" oninput="lfoOutput.value = lfoSlider.value">
+                <output id="lfoOutput">4</output>
+            </div>
+            <div>
+                <label for="lfoSlider">lfo amount:</label>
+                <input id="lfoAmountSlider" name="lfoAmountSlider" min="0" max="80" step="0.1" value="40" type="range" autocomplete="off" oninput="lfoAmountOutput.value = lfoAmountSlider.value">
+                <output id="lfoAmountOutput">40</output>
+            </div>
+            <div>
+                <label for="qSlider">resonance:</label>
+                <input id="qSlider" name="qSlider" min="0" max="15" step="0.5" value="8" type="range" autocomplete="off" oninput="qOutput.value = qSlider.value">
+                <output id="qOutput">8</output>
+            </div>
+            <div>
+                <label for="volSlider">vol:</label>
+                <input id="volSlider" name="volSlider" min="0" max="1" step="0.01" value="1" type="range" autocomplete="off" oninput="volOutput.value = volSlider.value">
+                <output id="volOutput">1</output>
+            </div>
+        </div>
+        <br>
+        <div>
+            <h5>Sampler Controls</h5>
+
+
+            <div>
+                <label for="speedSlider">speed</label>
+                <input id="speedSlider" name="speedSlider" min="0.1" max="2" step="0.1" value="1" type="range" autocomplete="off" oninput="speedOutput.value = speedSlider.value">
+                <output id="speedOutput">1</output>
+            </div>
+            <div style="margin: 0 200 0 20">
+                <label for="stepsSlider">glitches</label>
+                <input id="stepsSlider" name="stepsSlider" min="1" max="16" step="1" value="1" type="range" autocomplete="off" oninput="stepsOutput.value = stepsSlider.value">
+                <output id="stepsOutput">1</output>
+            </div>
+            <br>
+            <button type="button" class="btn btn-secondary" onclick="randomize()">Randomize</button>
+            <div>
+                <label for="aSlider1">1:</label>
+                <input id="aSlider" name="aSlider" min="1" max="16" step="1" value="1" type="range" autocomplete="off" oninput="aOutput.value = aSlider.value">
+                <output id="aOutput">1</output>
+            </div>
+            <div>
+                <label for="bSlider">2:</label>
+                <input id="bSlider" name="bSlider" min="1" max="16" step="1" value="2" type="range" autocomplete="off" oninput="bOutput.value = bSlider.value">
+                <output id="bOutput">2</output>
+            </div>
+            <div>
+                <label for="cSlider">3:</label>
+                <input id="cSlider" name="cSlider" min="1" max="16" step="1" value="3" type="range" autocomplete="off" oninput="cOutput.value = cSlider.value">
+                <output id="cOutput">3</output>
+            </div>
+            <div>
+                <label for="dSlider">4:</label>
+                <input id="dSlider" name="dSlider" min="1" max="16" step="1" value="4" type="range" autocomplete="off" oninput="dOutput.value = dSlider.value">
+                <output id="dOutput">4</output>
+            </div>
+            <div>
+                <label for="eSlider">5:</label>
+                <input id="eSlider" name="eSlider" min="1" max="16" step="1" value="5" type="range" autocomplete="off" oninput="eOutput.value = eSlider.value">
+                <output id="eOutput">5</output>
+            </div>
+            <div>
+                <label for="fSlider">6:</label>
+                <input id="fSlider" name="fSlider" min="1" max="16" step="1" value="6" type="range" autocomplete="off" oninput="fOutput.value = fSlider.value">
+                <output id="fOutput">6</output>
+            </div>
+            <div>
+                <label for="gSlider">7:</label>
+                <input id="gSlider" name="gSlider" min="1" max="16" step="1" value="7" type="range" autocomplete="off" oninput="gOutput.value = gSlider.value">
+                <output id="gOutput">7</output>
+            </div>
+
+            <div>
+                <label for="hSlider">8:</label>
+                <input id="hSlider" name="hSlider" min="1" max="16" step="1" value="8" type="range" autocomplete="off" oninput="hOutput.value = hSlider.value">
+                <output id="hOutput">8</output>
+            </div>
+            <div>
+                <label for="iSlider">9:</label>
+                <input id="iSlider" name="iSlider" min="1" max="16" step="1" value="9" type="range" autocomplete="off" oninput="iOutput.value = iSlider.value">
+                <output id="iOutput">9</output>
+            </div>
+            <div>
+                <label for="jSlider">10:</label>
+                <input id="jSlider" name="jSlider" min="1" max="16" step="1" value="10" type="range" autocomplete="off" oninput="jOutput.value = jSlider.value">
+                <output id="jOutput">10</output>
+            </div>
+            <div>
+                <label for="kSlider">11:</label>
+                <input id="kSlider" name="kSlider" min="1" max="16" step="1" value="11" type="range" autocomplete="off" oninput="kOutput.value = kSlider.value">
+                <output id="kOutput">11</output>
+            </div>
+            <div>
+                <label for="lSlider">12:</label>
+                <input id="lSlider" name="lSlider" min="1" max="16" step="1" value="12" type="range" autocomplete="off" oninput="lOutput.value = lSlider.value">
+                <output id="lOutput">12</output>
+            </div>
+            <div>
+                <label for="mSlider">13:</label>
+                <input id="mSlider" name="mSlider" min="1" max="16" step="1" value="13" type="range" autocomplete="off" oninput="mOutput.value = mSlider.value">
+                <output id="mOutput">1</output>
+            </div>
+            <div>
+                <label for="nSlider">14:</label>
+                <input id="nSlider" name="nSlider" min="1" max="16" step="1" value="14" type="range" autocomplete="off" oninput="nOutput.value = nSlider.value">
+                <output id="nOutput">13</output>
+            </div>
+            <div>
+                <label for="oSlider">15:</label>
+                <input id="oSlider" name="oSlider" min="1" max="16" step="1" value="15" type="range" autocomplete="off" oninput="oOutput.value = oSlider.value">
+                <output id="oOutput">14</output>
+            </div>
+            <div>
+                <label for="pSlider">16:</label>
+                <input id="pSlider" name="pSlider" min="1" max="16" step="1" value="16" type="range" autocomplete="off" oninput="pOutput.value = pSlider.value">
+                <output id="pOutput">17</output>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+<script src="https://www.doc.gold.ac.uk/eavi/rapidmix/RapidLib.js"></script>
+
+<script src="https://js.leapmotion.com/leap-0.6.4.min.js"></script>
+<!-- <script src="https://js.leapmotion.com/leap-plugins-0.1.12.min.js"></script> -->
+<script src="https://js.leapmotion.com/leap-plugins-0.1.12.js"></script>
+<script src="https://js.leapmotion.com/leap-plugins-0.1.12-utils.min.js"></script>
+<script src="https://js.leapmotion.com/leap-widgets-0.1.0.min.js"></script>
+<script src="https://js.leapmotion.com/leap.rigged-hand-0.1.7.min.js"></script>
+
+
+<script>
+    /*jshint esnext: true */
+
+    //alert("Slice up yer drums;");
+    /////////////////////////////////////////MAXI
+
+    var maxiAudio = new maximJs.maxiAudio();
+    var sample = new maximJs.maxiSample();
+
+    var myBass = new maximJs.maxiOsc();
+    var myFilter = new maximJs.maxiFilter();
+    var myLFO = new maximJs.maxiOsc();
+    var myHarmonic = new maximJs.maxiOsc();
+
+
+    maxiAudio.init();
+
+    // maxiAudio.loadSample('jongly.wav', sample);
+    //maxiAudio.loadSample('amen_full.wav', sample);
+    maxiAudio.loadSample('amen_short.wav', sample);
+
+    var mvSlider = document.getElementById("mvSlider");
+    var mvOutput = document.getElementById("mvOutput");
+
+
+    var aSlider = document.getElementById("aSlider");
+    var aOutput = document.getElementById("aOutput");
+
+    var bSlider = document.getElementById("bSlider");
+    var bOutput = document.getElementById("bOutput");
+
+    var cSlider = document.getElementById("cSlider");
+    var cOutput = document.getElementById("cOutput");
+
+    var dSlider = document.getElementById("dSlider");
+    var dOutput = document.getElementById("dOutput");
+
+    var eSlider = document.getElementById("eSlider");
+    var eOutput = document.getElementById("eOutput");
+
+    var fSlider = document.getElementById("fSlider");
+    var fOutput = document.getElementById("fOutput");
+
+    var gSlider = document.getElementById("gSlider");
+    var gOutput = document.getElementById("gOutput");
+
+    var hSlider = document.getElementById("hSlider");
+    var hOutput = document.getElementById("hOutput");
+
+    var iSlider = document.getElementById("iSlider");
+    var iOutput = document.getElementById("iOutput");
+
+    var jSlider = document.getElementById("jSlider");
+    var jOutput = document.getElementById("jOutput");
+
+    var kSlider = document.getElementById("kSlider");
+    var kOutput = document.getElementById("kOutput");
+
+    var lSlider = document.getElementById("lSlider");
+    var lOutput = document.getElementById("lOutput");
+
+    var mSlider = document.getElementById("mSlider");
+    var mOutput = document.getElementById("mOutput");
+
+    var nSlider = document.getElementById("nSlider");
+    var nOutput = document.getElementById("nOutput");
+
+    var oSlider = document.getElementById("oSlider");
+    var oOutput = document.getElementById("oOutput");
+
+    var pSlider = document.getElementById("pSlider");
+    var pOutput = document.getElementById("pOutput");
+
+    var stepsSlider = document.getElementById("stepsSlider");
+    var speedSlider = document.getElementById("speedSlider");
+
+    var cfSlider = document.getElementById("cfSlider");
+    var qSlider = document.getElementById("qSlider");
+    var lfoSlider = document.getElementById("lfoSlider");
+    var lfoAmountSlider = document.getElementById("lfoAmountSlider");
+    var volSlider = document.getElementById("volSlider");
+
+    var modCount = 1;
+
+    var start = 1;
+    //var sampleLength = 124439;
+    var sampleLength = 151064;
+    // var sampleLength = 292658;
+    var slice = sampleLength / 16;
+    var currentCount = 0;
+
+    var clock = new maximJs.maxiClock();
+    clock.setTicksPerBeat(4);
+
+    //  clock.setTempo(85.046 * speedSlider.value);
+    clock.setTempo(70 * speedSlider.value);
+
+
+    maxiAudio.play = function() {
+
+        clock.ticker();
+
+        if (clock.tick) {
+            currentCount++;
+            modCount = currentCount % 16;
+        }
+
+        if (modCount == 1) {
+            start = aSlider.value;
+        }
+        if (modCount == 2) {
+            start = bSlider.value;
+        }
+        if (modCount == 3) {
+            start = cSlider.value;
+        }
+        if (modCount == 4) {
+            start = dSlider.value;
+        }
+        if (modCount == 5) {
+            start = eSlider.value;
+        }
+        if (modCount == 6) {
+            start = fSlider.value;
+        }
+        if (modCount == 7) {
+            start = gSlider.value;
+        }
+        if (modCount == 8) {
+            start = hSlider.value;
+        }
+        if (modCount == 9) {
+            start = iSlider.value;
+        }
+        if (modCount == 10) {
+            start = jSlider.value;
+        }
+        if (modCount == 11) {
+            start = kSlider.value;
+        }
+        if (modCount == 12) {
+            start = lSlider.value;
+        }
+        if (modCount == 13) {
+            start = mSlider.value;
+        }
+        if (modCount == 14) {
+            start = nSlider.value;
+        }
+        if (modCount == 15) {
+            start = oSlider.value;
+        }
+        if (modCount == 16) {
+            start = pSlider.value;
+        }
+
+        //var steps = stepsSlider.value;
+        // var steps = 1;
+
+        //   var start = (startSlider.value * slice);
+        //var start = (modCount * slice);
+
+
+        //
+        //  var speedfactor = speedSlider.value;
+        //  var loopLength = (slice / steps);
+        //  var loopLength = slice;
+        // var speed = (steps * 4);
+        //  var speed = 4;
+        var loopStart = (start - 1) * slice;
+        var steps = stepsSlider.value;
+
+        var loopEnd = (loopStart + loopLength);
+
+        var loopLength = (slice / steps);
+        var speed = (steps * 4) * speedSlider.value;
+        var loopEnd = (loopStart + loopLength);
+
+
+        clock.setTempo(85.046 * speedSlider.value);
+
+        if (sample.isReady()) {
+
+            var masterVolume = parseFloat(mvSlider.value);
+
+            var LFOfreq = parseFloat(lfoSlider.value);
+            var lfoAmount = parseFloat(lfoAmountSlider.value);
+            var LFO = myLFO.sinewave(LFOfreq) * lfoAmount;
+            var bassFreq = parseFloat(cfSlider.value);
+            var cFreq = parseFloat(cfSlider.value);
+            var filter = LFO + (3 * cFreq);
+            var vol = parseFloat(volSlider.value);
+
+
+            // var oscOutput = vol * (myHarmonic.saw(bassFreq * 2) + myBass.square(bassFreq));
+            var modulation = 2000 * myHarmonic.sinewave(cFreq * 8);
+            var oscOutput = vol * myBass.saw((cFreq + modulation));
+            //  var oscOutput = vol * myBass.pulse((cFreq + modulation), 0.1);
+            var res = parseFloat(qSlider.value);
+            var filter = LFO + (2 * cFreq);
+            var myFilteredOutput = myFilter.lores(oscOutput, filter, res);
+            //	var cFreq = 300;
+            // var res = 8;
+            //	var myFilteredOutput = myFilter.lores(oscOutput, cFreq, res);
+            this.output = (sample.play(speed, loopStart, loopEnd) + myFilteredOutput) * masterVolume;
+
+        }
+    };
+    ////////////////////////////////////RAPID API
+
+    //Create a regression object
+    var rapidMix = window.RapidLib();
+    var myRegression = new rapidMix.Regression();
+
+    var myTrainingSet = [];
+
+    var trained = false;
+
+    function trainMe() {
+        console.log('regression trained: ', myRegression.train(myTrainingSet));
+        trained = true;
+    }
+
+    var regressionOutput;
+    var classificationOutput;
+
+    function process(input) {
+        regressionOutput = myRegression.process(input);
+        aSlider.value = regressionOutput[0];
+        bSlider.value = regressionOutput[1];
+        cSlider.value = regressionOutput[2];
+        dSlider.value = regressionOutput[3];
+        eSlider.value = regressionOutput[4];
+        fSlider.value = regressionOutput[5];
+        gSlider.value = regressionOutput[6];
+        hSlider.value = regressionOutput[7];
+        iSlider.value = regressionOutput[8];
+        jSlider.value = regressionOutput[9];
+        kSlider.value = regressionOutput[10];
+        lSlider.value = regressionOutput[11];
+        mSlider.value = regressionOutput[12];
+        nSlider.value = regressionOutput[13];
+        oSlider.value = regressionOutput[14];
+        pSlider.value = regressionOutput[15];
+
+        stepsSlider.value = regressionOutput[16];
+        speedSlider.value = regressionOutput[17];
+        cfSlider.value = regressionOutput[18];
+        qSlider.value = regressionOutput[19];
+        lfoSlider.value = regressionOutput[20];
+        lfoAmountSlider.value = regressionOutput[21];
+
+        // Note Synth vol is also controlled
+        volSlider.value = regressionOutput[22];
+    }
+    ////////////////////////////////////CONTROLS AND INPUT
+
+    // This is where we are going to store the mouse information
+    var mouseX;
+    var mouseY;
+    var myOutput = '(use number keys)';
+
+    // This gets a reference to the canvas in the browser
+    var canvas = document.querySelector("canvas");
+
+    // This sets the width and height to the document window
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - 150;
+    // Be aware that when you resize the window, you will need to call (do) this again
+
+    // This creates a 2d drawing 'context' in your canvas
+    // All your drawing will be done in this canvas
+    var context = canvas.getContext("2d");
+    //This tells the browser to get the mouse information from the function we've called getMouse
+    window.addEventListener('mousemove', getLeapData, false);
+    window.addEventListener('keydown', this.check, false);
+
+
+    function check(e) {
+        //console.log(e.keyCode);
+        switch (e.keyCode) {
+            case 88:
+                togRecord();
+                break;
+            case 82:
+                togRun();
+                break;
+            case 84:
+                trainMe();
+                break;
+            default:
+                myOutput = e.keyCode - 48;
+        }
+    }
+
+
+    function getLeapData() {
+        // console.log(this.hand1direction);
+        // console.log(this.hand2direction);
+
+        if (recordState) {
+            var rapidInput = [this.hand1direction[0], this.hand1direction[1], this.hand1direction[2]];
+            var rapidOutput = [(aSlider.value), (bSlider.value), (cSlider.value), (dSlider.value), (eSlider.value), (fSlider.value), (gSlider.value), (hSlider.value), (iSlider.value), (jSlider.value), (kSlider.value), (lSlider.value), (mSlider.value),
+                (nSlider.value), (oSlider.value), (pSlider.value), (stepsSlider.value), (speedSlider.value), (cfSlider.value), (qSlider.value), (lfoSlider.value), (lfoAmountSlider.value), (volSlider.value)
+            ];
+            myTrainingSet.push({
+                input: rapidInput,
+                output: rapidOutput
+            });
+
+        }
+
+        if (runState) {
+            console.log("RUNNING");
+            var rapidInput = [this.hand1direction[0], this.hand1direction[1], this.hand1direction[2]];
+            process(rapidInput);
+        }
+    }
+
+    var recordState;
+
+    function togRecord() {
+        recordState = !recordState;
+        if (recordState) {
+            console.log("recording!");
+        } else {
+            console.log("stopped recording");
+        }
+    }
+
+    var runState;
+
+    function togRun() {
+        runState = !runState;
+        console.log("running");
+    }
+
+    function randomize() {
+        aSlider.value = 16 * Math.random();
+        bSlider.value = 16 * Math.random();
+        cSlider.value = 16 * Math.random();
+        dSlider.value = 16 * Math.random();
+        eSlider.value = 16 * Math.random();
+        fSlider.value = 16 * Math.random();
+        gSlider.value = 16 * Math.random();
+        hSlider.value = 16 * Math.random();
+        iSlider.value = 16 * Math.random();
+        jSlider.value = 16 * Math.random();
+        kSlider.value = 16 * Math.random();
+        lSlider.value = 16 * Math.random();
+        mSlider.value = 16 * Math.random();
+        nSlider.value = 16 * Math.random();
+        oSlider.value = 16 * Math.random();
+        pSlider.value = 16 * Math.random();
+
+        updateOutputs();
+
+
+    }
+
+    function updateOutputs() {
+        aOutput.value = aSlider.value;
+        bOutput.value = bSlider.value;
+        cOutput.value = cSlider.value;
+        dOutput.value = dSlider.value;
+        eOutput.value = eSlider.value;
+        fOutput.value = fSlider.value;
+        gOutput.value = gSlider.value;
+        hOutput.value = hSlider.value;
+        iOutput.value = iSlider.value;
+        jOutput.value = jSlider.value;
+        kOutput.value = kSlider.value;
+        lOutput.value = lSlider.value;
+        mOutput.value = mSlider.value;
+        nOutput.value = nSlider.value;
+        oOutput.value = oSlider.value;
+        pOutput.value = pSlider.value;
+    }
+
+    //  function reverse() {
+    //      speed =  -1;
+    //  }
+
+    /////////////////Drawing
+    function draw() {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        //record state
+        context.font = "16px Verdana";
+        context.fillStyle = "#00FF00";
+        if (recordState) {
+            context.fillText('RECORDING! (x)', 20, 100);
+        } else {
+            context.fillText('x = record', 20, 100);
+        }
+        if (trained) {
+            context.fillText('(T)RAINED!', 20, 120);
+        } else {
+            context.fillText('t = train', 20, 120);
+        }
+        if (runState) {
+            context.fillText('(R)UNNING!', 20, 140);
+        } else {
+            context.fillText('r = run', 20, 140);
+        }
+        //output
+        context.fillText('regression output: ' + regressionOutput, 20, 220);
+
+        //mouse coordinates
+        context.font = "14px Verdana";
+        context.fillText('(' + mouseX + ', ' + mouseY + ')', 20, canvas.height - 50);
+
+        window.requestAnimationFrame(draw);
+    }
+    window.requestAnimationFrame(draw);
+
+
+    /*******************************************************************************************************************************************************************/
+    /*******************************************************************************************************************************************************************/
+    /*******************************************************************************************************************************************************************/
+    /*******************************************************************************************************************************************************************/
+    /*******************************************************************************************************************************************************************/
+    /**************************** Main Leap Loop  **********************************************************************************************************************/
+    /*******************************************************************************************************************************************************************/
+    /*******************************************************************************************************************************************************************/
+    /*******************************************************************************************************************************************************************/
+    /*******************************************************************************************************************************************************************/
+    /*******************************************************************************************************************************************************************/
+
+    var mode = 'stop';
+
+    var noUiSlider, Leap;
+
+    var frameData = document.getElementById('frameData');
+    var handData = document.getElementById('handData');
+    var pointableData = document.getElementById('pointableData');
+    var slider = document.getElementById('slider');
+
+    slider.style.margin = '20 50 20 50';
+
+    // Setup Leap loop with frame callback function
+    var controllerOptions = {
+        background: true,
+        enableGestures: false
+    };
+
+    function vectorToString(vector, digits) {
+        if (typeof digits === "undefined") {
+            digits = 1;
+        }
+        return "(" + vector[0].toFixed(digits) + ", " + vector[1].toFixed(digits) + ", " + vector[2].toFixed(digits) + ")";
+    }
+
+    var hand1direction, hand2direction;
+
+    Leap.loop(controllerOptions, function(frame) {
+
+        var frameString = "Frame ID: " + frame.id + "<br />" + "Timestamp: " + frame.timestamp + " &micro;s<br />" + "Hands: " + frame.hands.length + "<br />" + "Fingers: " + frame.fingers.length + "<br />";
+
+        frameData.innerHTML = frameString;
+
+        var handString = "";
+        if (frame.hands.length > 0) {
+            for (var i = 0; i < frame.hands.length; i++) {
+
+                var hand = frame.hands[i];
+                handString += "Hand ID: " + hand.id + "<br />";
+                handString += "Direction: " + vectorToString(hand.direction, 2) + "<br />";
+                handString += "Palm normal: " + vectorToString(hand.palmNormal, 2) + "<br />";
+                handString += "Palm position: " + vectorToString(hand.palmPosition) + " mm<br />";
+                handString += "Palm velocity: " + vectorToString(hand.palmVelocity) + " mm/s<br />";
+                handString += "Sphere center: " + vectorToString(hand.sphereCenter) + " mm<br />";
+                handString += "Sphere radius: " + hand.sphereRadius.toFixed(1) + " mm<br />";
+
+                // Quick and dirty hack
+                if (i === 0) {
+                    hand1direction = hand.direction;
+                } else {
+                    hand2direction = hand.direction;
+                }
+            }
+            handData.style.visibility = "visible";
+        } else {
+            handData.style.visibility = "hidden";
+        }
+
+        handData.innerHTML = handString;
+
+
+        // Display Pointable (finger) object data
+        var pointableString = "";
+        if (frame.pointables.length > 0) {
+            for (var i = 0; i < frame.pointables.length; i++) {
+                var pointable = frame.pointables[i];
+
+                pointableString += "Pointable ID: " + pointable.id + "<br />";
+                pointableString += "Belongs to hand with ID: " + pointable.handId + "<br />";
+                pointableString += "Length: " + pointable.length.toFixed(1) + " mm<br />";
+                pointableString += "Width: " + pointable.width.toFixed(1) + " mm<br />";
+                pointableString += "Direction: " + vectorToString(pointable.direction, 2) + "<br />";
+                pointableString += "Tip position: " + vectorToString(pointable.tipPosition) + " mm<br />";
+                pointableString += "Tip velocity: " + vectorToString(pointable.tipVelocity) + " mm/s<br />";
+            }
+            pointableData.style.visibility = "visible";
+        } else {
+            pointableData.style.visibility = "hidden";
+        }
+        pointableData.innerHTML = pointableString;
+
+
+        // console.log("getLeap");
+
+        getLeapData();
+    });
+
+    (window.controller = new Leap.Controller({
+            background: true
+        }).use('playback', {
+            loop: false,
+            pauseHotkey: false,
+            pauseOnHand: false
+        })
+        .use('riggedHand')
+        .connect());
+
+
+    function updateSliderRange(min, max) {
+        slider.noUiSlider.updateOptions({
+            range: {
+                'min': min,
+                'max': max
+            },
+            start: [min, max],
+            step: 1
+        });
+    }
+
+    function onRecordClick() {
+        if (mode != 'record') {
+            window.controller.plugins.playback.player.record();
+            // slider.style.visibility='hidden';
+            mode = 'record';
+        } else {
+            window.controller.plugins.playback.player.finishRecording();
+
+            var slider = document.getElementById('slider');
+            if (slider.noUiSlider != null)
+                slider.noUiSlider.destroy();
+            else
+                noUiSlider.create(slider, {
+                    start: [0, window.controller.plugins.playback.player.recording.frameCount],
+                    connect: true,
+                    step: 1,
+                    behaviour: 'drag',
+                    tooltips: [true, true],
+                    range: {
+                        'min': 0,
+                        'max': window.controller.plugins.playback.player.recording.frameCount
+                    },
+                    format: {
+                        to: function(value) {
+                            return Math.round(value);
+                        },
+                        from: function(value) {
+                            return Math.round(value);
+                        }
+                    }
+                });
+
+            slider.noUiSlider.on('update', function(values, handle) {
+                console.log('values[' + handle + ']' + values[handle]);
+                window.controller.plugins.playback.player.setFrameIndex(values[handle]);
+                if (handle === 0) {
+                    window.controller.plugins.playback.player.recording.leftCrop();
+                } else {
+                    window.controller.plugins.playback.player.recording.rightCropPosition = values[handle];
+                }
+            });
+
+            // updateSliderRange(0, window.controller.plugins.playback.player.recording.frameCount);
+            // slider.noUiSlider.set(0, window.controller.plugins.playback.player.recording.frameCount);
+            slider.style.visibility = 'visible';
+            mode = 'stop';
+        }
+        // this.setState({isTracking: (! this.state.isTracking )});
+    }
+
+    function onPlayClick() {
+        // if (this.state.isTracking) {
+        //      window.controller.stopTracking();
+        // } else {
+        //      window.controller.startTracking();
+        // }
+        // this.setState({isTracking: (! this.state.isTracking )});
+
+        window.controller.plugins.playback.player.play();
+        mode = 'play';
+    }
+
+    function onCropClick() {
+        // if (this.state.isTracking) {
+        //      window.controller.stopTracking();
+        // } else {
+        //      window.controller.startTracking();
+        // }
+        // this.setState({isTracking: (! this.state.isTracking )});
+
+        console.log('total frames Count: ' + window.controller.plugins.playback.player.recording.frameCount);
+
+        var arrayOfFrames = window.controller.plugins.playback.player.recording.croppedFrameData();
+        console.log('cropped frames count: ' + arrayOfFrames.length);
+    }
+</script>
+
+</html>
