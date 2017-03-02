@@ -36,13 +36,23 @@
             bottom: 18px;
         }
 
+        .block_vertical_slider {
+            display: inline-block;
+        }
+
+        .vertical_slider {
+            -webkit-appearance: slider-vertical;
+            width: 18px;
+            margin: 0 9 0 0;
+        }
+
         #container_leap_protocol {
             margin: 0 20 0 0;
             position: absolute;
             width: 100%;
             height: 100%;
             top: 5%;
-            left: 40%;
+            left: 5%;
             z-index: 1;
         }
 
@@ -52,7 +62,7 @@
             width: 100%;
             height: 100%;
             top: 20%;
-            left: 0;
+            left: 40%;
             z-index: 1;
         }
 
@@ -61,8 +71,8 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            top: 30%;
-            left: 0;
+            top: 60%;
+            left: 5%;
             z-index: 1;
         }
 
@@ -72,40 +82,9 @@
             width: 100%;
             height: 100%;
             top: 40%;
-            left: 0;
+            left: 60%;
             z-index: 1;
         }
-        /*#progress {*/
-        /*	background: #005d98;*/
-        /*	position: fixed;*/
-        /*	bottom: 0;*/
-        /*	left: 0;*/
-        /*	height: 16px;*/
-        /*	width: 0%;*/
-        /*}*/
-        /*svg {*/
-        /*	display: block;*/
-        /*}*/
-        /*#controls {*/
-        /*	margin: auto;*/
-        /*	position: absolute;*/
-        /*	width: 100%;*/
-        /*	height: 100%;*/
-        /*	top: 80%;*/
-        /*	left: 0;*/
-        /*	z-index: 1;*/
-        /*}*/
-        /*#buttons_container {*/
-        /*	margin: 20 20 20 20;*/
-        /*	width: 100%;*/
-        /*}*/
-        /*#chart,*/
-        /*svg {*/
-        /*	margin: 0px;*/
-        /*	padding: 0px;*/
-        /*	height: 50%;*/
-        /*	width: 50%;*/
-        /*}*/
     </style>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -131,7 +110,7 @@
 
             <div id="handData">
                 <h6>Hand data:</h6>
-                <div>
+                <div id="handBlocks">
                     <div id="handData1" class="block_leap_info"></div>
                     <div id="handData2" class="block_leap_info"></div>
                 </div>
@@ -150,39 +129,41 @@
 
     <div id="container_leap_controls">
         <h4>Leap Controls</h4>
-        <div id="slider"></div>
-        <br>
-        <div id="buttons_container">
-            <div class="btn-group btn-group-lg dropup">
-                <button id="record" type="button" class="btn btn-secondary" onclick="onRecordClick()">
+        <div style="margin:60 60 60 60;">
+            <div id="slider" style="margin:60 60 60 60;"></div>
+            <br>
+            <div id="buttons_container">
+                <div class="btn-group btn-group-lg dropup">
+                    <button id="record" type="button" class="btn btn-secondary" onclick="onRecordClick()">
                      <i class="glyphicon glyphicon-record" ng-class="{orangerecordPending(), red: recording()}"></i>
                      <span class="hotkey">R</span>ecord
                  </button>
-                <button id="crop" type="button" class="btn btn-secondary" onclick="onCropClick()">
+                    <button id="crop" type="button" class="btn btn-secondary" onclick="onCropClick()">
                      <span style="margin-top: -2px; display: inline-block;     vertical-align: top;">[ ]</span>
                      <span class="hotkey">C</span>rop
                  </button>
 
-                <button style="text-align:left" type="button" class="btn btn-secondary" onclick="onPlayClick()">
+                    <button style="text-align:left" type="button" class="btn btn-secondary" onclick="onPlayClick()">
                      <span>&#9654;</span>
                      <span><i class="glyphicon glyphicon-pause"></i>
                      </span>
                      <span class="hotkey">P</span>layback
                  </button>
-            </div>
-            <div class="btn-group btn-group-lg dropup">
-                <button type="button" class="btn btn-secondary" ng-click="save()">Upload</button>
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+                </div>
+                <div class="btn-group btn-group-lg dropup">
+                    <button type="button" class="btn btn-secondary" ng-click="save()">Upload</button>
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
                                    <span class="caret"></span>
                               </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a href="#" onclick="save()"><b>Compressed</b></a>
-                    </li>
-                    <li>
-                        <a href="#" ng-click="save('json')">As JSON</a>
-                    </li>
-                </ul>
+                    <ul class="dropdown-menu" role="menu">
+                        <li>
+                            <a href="#" onclick="save()"><b>Compressed</b></a>
+                        </li>
+                        <li>
+                            <a href="#" ng-click="save('json')">As JSON</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -262,85 +243,118 @@
             </div>
             <br>
             <button type="button" class="btn btn-secondary" onclick="randomize()">Randomize</button>
-            <div>
-                <label for="aSlider1">1:</label>
-                <input id="aSlider" name="aSlider" min="1" max="16" step="1" value="1" type="range" autocomplete="off" oninput="aOutput.value = aSlider.value">
+            <div class="block_vertical_slider">
+                <label for="aSlider1">1</label>
+                <br>
+                <input id="aSlider" class="vertical_slider" name="aSlider" min="1" max="16" step="1" value="1" type="range" autocomplete="off" oninput="aOutput.value = aSlider.value">
+                <br>
                 <output id="aOutput">1</output>
             </div>
-            <div>
-                <label for="bSlider">2:</label>
-                <input id="bSlider" name="bSlider" min="1" max="16" step="1" value="2" type="range" autocomplete="off" oninput="bOutput.value = bSlider.value">
+            <div class="block_vertical_slider">
+                <label for="bSlider">2</label>
+                <br>
+                <input id="bSlider" class="vertical_slider" name="bSlider" min="1" max="16" step="1" value="2" type="range" autocomplete="off" oninput="bOutput.value = bSlider.value">
+                <br>
                 <output id="bOutput">2</output>
             </div>
-            <div>
-                <label for="cSlider">3:</label>
-                <input id="cSlider" name="cSlider" min="1" max="16" step="1" value="3" type="range" autocomplete="off" oninput="cOutput.value = cSlider.value">
+            <div class="block_vertical_slider">
+                <label for="cSlider">3</label>
+                <br>
+                <input id="cSlider" class="vertical_slider" name="cSlider" min="1" max="16" step="1" value="3" type="range" autocomplete="off" oninput="cOutput.value = cSlider.value">
+                <br>
                 <output id="cOutput">3</output>
             </div>
-            <div>
-                <label for="dSlider">4:</label>
-                <input id="dSlider" name="dSlider" min="1" max="16" step="1" value="4" type="range" autocomplete="off" oninput="dOutput.value = dSlider.value">
+            <div class="block_vertical_slider">
+                <label for="dSlider">4</label>
+                <br>
+                <input id="dSlider" class="vertical_slider" name="dSlider" min="1" max="16" step="1" value="4" type="range" autocomplete="off" oninput="dOutput.value = dSlider.value">
+                <br>
                 <output id="dOutput">4</output>
             </div>
-            <div>
-                <label for="eSlider">5:</label>
-                <input id="eSlider" name="eSlider" min="1" max="16" step="1" value="5" type="range" autocomplete="off" oninput="eOutput.value = eSlider.value">
+            <div class="block_vertical_slider">
+                <label for="eSlider">5</label>
+                <br>
+                <input id="eSlider" class="vertical_slider" name="eSlider" min="1" max="16" step="1" value="5" type="range" autocomplete="off" oninput="eOutput.value = eSlider.value">
+                <br>
                 <output id="eOutput">5</output>
             </div>
-            <div>
-                <label for="fSlider">6:</label>
-                <input id="fSlider" name="fSlider" min="1" max="16" step="1" value="6" type="range" autocomplete="off" oninput="fOutput.value = fSlider.value">
+            <div class="block_vertical_slider">
+                <label for="fSlider">6</label>
+                <br>
+                <input id="fSlider" class="vertical_slider" name="fSlider" min="1" max="16" step="1" value="6" type="range" autocomplete="off" oninput="fOutput.value = fSlider.value">
+                <br>
                 <output id="fOutput">6</output>
+                <br>
             </div>
-            <div>
-                <label for="gSlider">7:</label>
-                <input id="gSlider" name="gSlider" min="1" max="16" step="1" value="7" type="range" autocomplete="off" oninput="gOutput.value = gSlider.value">
+            <div class="block_vertical_slider">
+                <label for="gSlider">7</label>
+                <br>
+                <input id="gSlider" class="vertical_slider" name="gSlider" min="1" max="16" step="1" value="7" type="range" autocomplete="off" oninput="gOutput.value = gSlider.value">
+                <br>
                 <output id="gOutput">7</output>
+                <br>
             </div>
-
-            <div>
-                <label for="hSlider">8:</label>
-                <input id="hSlider" name="hSlider" min="1" max="16" step="1" value="8" type="range" autocomplete="off" oninput="hOutput.value = hSlider.value">
+            <div class="block_vertical_slider">
+                <label for="hSlider">8</label>
+                <br>
+                <input id="hSlider" class="vertical_slider" name="hSlider" min="1" max="16" step="1" value="8" type="range" autocomplete="off" oninput="hOutput.value = hSlider.value">
+                <br>
                 <output id="hOutput">8</output>
             </div>
-            <div>
-                <label for="iSlider">9:</label>
-                <input id="iSlider" name="iSlider" min="1" max="16" step="1" value="9" type="range" autocomplete="off" oninput="iOutput.value = iSlider.value">
+            <div class="block_vertical_slider">
+                <label for="iSlider">9</label>
+                <br>
+                <input id="iSlider" class="vertical_slider" name="iSlider" min="1" max="16" step="1" value="9" type="range" autocomplete="off" oninput="iOutput.value = iSlider.value">
+                <br>
                 <output id="iOutput">9</output>
             </div>
-            <div>
-                <label for="jSlider">10:</label>
-                <input id="jSlider" name="jSlider" min="1" max="16" step="1" value="10" type="range" autocomplete="off" oninput="jOutput.value = jSlider.value">
+            <div class="block_vertical_slider">
+                <label for="jSlider">10</label>
+                <br>
+                <input id="jSlider" class="vertical_slider" name="jSlider" min="1" max="16" step="1" value="10" type="range" autocomplete="off" oninput="jOutput.value = jSlider.value">
+                <br>
                 <output id="jOutput">10</output>
             </div>
             <div>
-                <label for="kSlider">11:</label>
-                <input id="kSlider" name="kSlider" min="1" max="16" step="1" value="11" type="range" autocomplete="off" oninput="kOutput.value = kSlider.value">
+                <label for="kSlider">11</label>
+                <br>
+                <input id="kSlider" class="vertical_slider" name="kSlider" min="1" max="16" step="1" value="11" type="range" autocomplete="off" oninput="kOutput.value = kSlider.value">
+                <br>
                 <output id="kOutput">11</output>
             </div>
-            <div>
-                <label for="lSlider">12:</label>
-                <input id="lSlider" name="lSlider" min="1" max="16" step="1" value="12" type="range" autocomplete="off" oninput="lOutput.value = lSlider.value">
+            <div class="block_vertical_slider">
+                <label for="lSlider">12</label>
+                <br>
+                <input id="lSlider" class="vertical_slider" name="lSlider" min="1" max="16" step="1" value="12" type="range" autocomplete="off" oninput="lOutput.value = lSlider.value">
+                <br>
                 <output id="lOutput">12</output>
             </div>
             <div>
-                <label for="mSlider">13:</label>
-                <input id="mSlider" name="mSlider" min="1" max="16" step="1" value="13" type="range" autocomplete="off" oninput="mOutput.value = mSlider.value">
+                <label for="mSlider">13</label>
+                <br>
+                <input id="mSlider" class="vertical_slider" name="mSlider" min="1" max="16" step="1" value="13" type="range" autocomplete="off" oninput="mOutput.value = mSlider.value">
+                <br>
                 <output id="mOutput">1</output>
             </div>
-            <div>
-                <label for="nSlider">14:</label>
-                <input id="nSlider" name="nSlider" min="1" max="16" step="1" value="14" type="range" autocomplete="off" oninput="nOutput.value = nSlider.value">
+            <div class="block_vertical_slider">
+                <label for="nSlider">14</label>
+                <br>
+                <input id="nSlider" class="vertical_slider" name="nSlider" min="1" max="16" step="1" value="14" type="range" autocomplete="off" oninput="nOutput.value = nSlider.value">
+                <br>
                 <output id="nOutput">13</output>
             </div>
-            <div>
-                <label for="oSlider">15:</label>
-                <input id="oSlider" name="oSlider" min="1" max="16" step="1" value="15" type="range" autocomplete="off" oninput="oOutput.value = oSlider.value">
+            <div class="block_vertical_slider">
+                <label for="oSlider">15</label>
+                <br>
+                <input id="oSlider" class="vertical_slider" name="oSlider" min="1" max="16" step="1" value="15" type="range" autocomplete="off" oninput="oOutput.value = oSlider.value">
+                <br>
                 <output id="oOutput">14</output>
             </div>
-            <div>
-                <label for="pSlider">16:</label>
-                <input id="pSlider" name="pSlider" min="1" max="16" step="1" value="16" type="range" autocomplete="off" oninput="pOutput.value = pSlider.value">
+            <div class="block_vertical_slider">
+                <label for="pSlider">16</label>
+                <br>
+                <input id="pSlider" class="vertical_slider" name="pSlider" min="1" max="16" step="1" value="16" type="range" autocomplete="off" oninput="pOutput.value = pSlider.value">
+                <br>
                 <output id="pOutput">17</output>
             </div>
         </div>
@@ -793,12 +807,13 @@
 
     var frameData = document.getElementById('frameData');
     var handData = document.getElementById('handData');
+    var handBlocks = document.getElementById('handBlocks');
     var handData1 = document.getElementById('handData1');
     var handData2 = document.getElementById('handData2');
     var pointableData = document.getElementById('pointableData');
     var slider = document.getElementById('slider');
 
-    slider.style.margin = '20 50 20 50';
+
 
     // Setup Leap loop with frame callback function
     var controllerOptions = {
@@ -826,22 +841,24 @@
             for (var i = 0; i < frame.hands.length; i++) {
 
                 var hand = frame.hands[i];
+
+                handString += "<div id=&quot;handData" + i + "&quot; class=&quot;block_leap_info&quot;></div>";
                 handString += "Hand ID: " + hand.id + "<br />";
                 handString += "Direction: " + vectorToString(hand.direction, 2) + "<br />";
                 handString += "Palm normal: " + vectorToString(hand.palmNormal, 2) + "<br />";
                 handString += "Palm position: " + vectorToString(hand.palmPosition) + " mm<br />";
                 handString += "Palm velocity: " + vectorToString(hand.palmVelocity) + " mm/s<br />";
                 handString += "Sphere center: " + vectorToString(hand.sphereCenter) + " mm<br />";
-                handString += "Sphere radius: " + hand.sphereRadius.toFixed(1) + " mm<br />";
+                handString += "Sphere radius: " + hand.sphereRadius.toFixed(1) + " mm<br /><br />";
 
                 // Quick and dirty hack
                 if (i === 0) {
                     hand1direction = hand.direction;
-                    handData1.innerHTML = handString;
-                    handString = "";
+                    // handData1.innerHTML = handString;
+                    // handString = "";
                 } else {
                     hand2direction = hand.direction;
-                    handData2.innerHTML = handString;
+                    // handData2.innerHTML = handString;
                 }
             }
             handData.style.visibility = "visible";
@@ -849,7 +866,7 @@
             handData.style.visibility = "hidden";
         }
 
-        // handData.innerHTML = handString;
+        handBlocks.innerHTML = handString;
 
 
         // Display Pointable (finger) object data
@@ -858,8 +875,8 @@
             for (var i = 0; i < frame.pointables.length; i++) {
                 var pointable = frame.pointables[i];
 
-                pointableString += "Pointable ID: " + pointable.id + "<br />";
-                pointableString += "Belongs to hand with ID: " + pointable.handId + "<br />";
+                // pointableString += "Pointable ID: " + pointable.id + "<br />";
+                // pointableString += "Belongs to hand with ID: " + pointable.handId + "<br />";
                 pointableString += "Length: " + pointable.length.toFixed(1) + " mm<br />";
                 pointableString += "Width: " + pointable.width.toFixed(1) + " mm<br />";
                 pointableString += "Direction: " + vectorToString(pointable.direction, 2) + "<br />";
