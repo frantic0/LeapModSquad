@@ -14,7 +14,6 @@
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
         }
-
         /*canvas {*/
         /*    position: fixed;*/
         /*    width: 100%;*/
@@ -23,6 +22,11 @@
         /*    left: 0;*/
         /*    z-index: -1;*/
         /*}*/
+
+        .block_leap_info {
+            display: inline-block;
+            width: 350px;
+        }
 
         #output {
             font-size: 66px;
@@ -38,7 +42,7 @@
             width: 100%;
             height: 100%;
             top: 5%;
-            left: 30%;
+            left: 40%;
             z-index: 1;
         }
 
@@ -124,19 +128,30 @@
             <div id="frameData"></div>
             <div style="clear:both;"></div>
             <br>
-            <h6>Hand data:</h6>
-            <div id="handData"></div>
-            <div style="clear:both;"></div>
+
+            <div id="handData">
+                <h6>Hand data:</h6>
+                <div>
+                    <div id="handData1" class="block_leap_info"></div>
+                    <div id="handData2" class="block_leap_info"></div>
+                </div>
+            </div>
             <br>
-            <h6>Finger data:</h6>
-            <div id="pointableData"></div>
-            <div style="clear:both;"></div>
+
+            <div id="pointableData">
+                <h6>Finger data:</h6>
+                <div>
+                    <div id="pointableData1" class="block_leap_info"></div>
+                    <div id="pointableData2" class="block_leap_info"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <div id="container_leap_controls">
         <h4>Leap Controls</h4>
         <div id="slider"></div>
+        <br>
         <div id="buttons_container">
             <div class="btn-group btn-group-lg dropup">
                 <button id="record" type="button" class="btn btn-secondary" onclick="onRecordClick()">
@@ -197,8 +212,8 @@
             <h4>Audio Controls</h4>
             <div>
                 <label for="mvSlider">master volume:</label>
-                <input id="mvSlider" name="mvSlider" min="0" max="1" step="0.01" value="1" type="range" autocomplete="off" oninput="mvOutput.value = mvSlider.value">
-                <output id="mvOutput">0.25</output>
+                <input id="mvSlider" name="mvSlider" min="0" max="1" step="0.01" value="0" type="range" autocomplete="off" oninput="mvOutput.value = mvSlider.value">
+                <output id="mvOutput">0</output>
             </div>
         </div>
         <br>
@@ -778,6 +793,8 @@
 
     var frameData = document.getElementById('frameData');
     var handData = document.getElementById('handData');
+    var handData1 = document.getElementById('handData1');
+    var handData2 = document.getElementById('handData2');
     var pointableData = document.getElementById('pointableData');
     var slider = document.getElementById('slider');
 
@@ -820,8 +837,11 @@
                 // Quick and dirty hack
                 if (i === 0) {
                     hand1direction = hand.direction;
+                    handData1.innerHTML = handString;
+                    handString = "";
                 } else {
                     hand2direction = hand.direction;
+                    handData2.innerHTML = handString;
                 }
             }
             handData.style.visibility = "visible";
@@ -829,7 +849,7 @@
             handData.style.visibility = "hidden";
         }
 
-        handData.innerHTML = handString;
+        // handData.innerHTML = handString;
 
 
         // Display Pointable (finger) object data
