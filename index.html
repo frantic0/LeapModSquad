@@ -14,18 +14,14 @@
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
         }
-        /*canvas {*/
-        /*    position: fixed;*/
-        /*    width: 100%;*/
-        /*    height: 100%;*/
-        /*    top: 0;*/
-        /*    left: 0;*/
-        /*    z-index: -1;*/
-        /*}*/
 
-        .block_leap_info {
-            display: inline-block;
-            width: 350px;
+        canvas {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
         }
 
         #output {
@@ -34,6 +30,55 @@
             text-align: left;
             position: fixed;
             bottom: 18px;
+        }
+
+        #container_leap_protocol {
+            margin: 0 20 0 0;
+            position: absolute;
+            width: auto;
+            height: auto;
+            top: 5%;
+            left: 2%;
+            z-index: 1;
+        }
+
+        #container_leap_controls {
+            margin: 0 20 0 0;
+            position: absolute;
+            width: auto;
+            height: auto;
+            top: 50%;
+            left: 35%;
+            z-index: 1;
+        }
+
+        #container_machine_learning_controls {
+            margin: 0 20 0 0;
+            position: absolute;
+            width: auto;
+            height: auto;
+            top: 65%;
+            left: 35%;
+            z-index: 2;
+        }
+
+        #container_audio_controls {
+            margin: 0 20 0 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 60%;
+            left: 40%;
+            z-index: 0;
+        }
+
+        #slider {
+            z-index: 1;
+        }
+
+        .audio_control_blocks {
+            display: inline-block;
+            padding: 0 10px 0 10px;
         }
 
         .block_vertical_slider {
@@ -46,51 +91,10 @@
             margin: 0 4 0 0;
         }
 
-        #container_leap_protocol {
-            margin: 0 20 0 0;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 5%;
-            left: 2%;
-            z-index: 1;
+        .block_leap_info {
+            display: inline-block;
+            /*width: 350px;*/
         }
-
-        #container_leap_controls {
-            margin: 0 20 0 0;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 45%;
-            left: 35%;
-            z-index: 1;
-        }
-
-        #container_machine_learning_controls {
-            margin: 0 20 0 0;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 60%;
-            left: 35%;
-            z-index: 1;
-        }
-
-        #container_audio_controls {
-            margin: 0 20 0 0;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 60%;
-            left: 40%;
-            z-index: 1;
-        }
-
-        .audio_control_blocks {
-          display: inline-block;
-          padding: 0 10px 0 10px;
-        }
-
     </style>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
@@ -117,8 +121,8 @@
             <div id="handData">
                 <h6>Hand data:</h6>
                 <div id="handBlocks">
+                    <div id="handData0" class="block_leap_info"></div>
                     <div id="handData1" class="block_leap_info"></div>
-                    <div id="handData2" class="block_leap_info"></div>
                 </div>
             </div>
             <br>
@@ -136,11 +140,10 @@
     <div id="container_leap_controls">
         <h4>Leap Controls</h4>
         <div style="margin:60 60 60 60;">
-            <div id="slider" style="margin:60 60 60 60;"></div>
-            <br>
             <div id="buttons_container">
                 <div class="btn-group btn-group-lg dropup">
-                    <button id="record" type="button" class="btn btn-secondary" onclick="onRecordClick()">
+                    <button id="record" type="button" class="btn btn-outline-danger" data-toggle="button" aria-pressed="false" onclick="onRecordClick()">
+                       <span>&#9673;</span>
                      <i class="glyphicon glyphicon-record" ng-class="{orangerecordPending(), red: recording()}"></i>
                      <span class="hotkey">R</span>ecord
                  </button>
@@ -148,7 +151,6 @@
                      <span style="margin-top: -2px; display: inline-block;     vertical-align: top;">[ ]</span>
                      <span class="hotkey">C</span>rop
                  </button>
-
                     <button style="text-align:left" type="button" class="btn btn-secondary" onclick="onPlayClick()">
                      <span>&#9654;</span>
                      <span><i class="glyphicon glyphicon-pause"></i>
@@ -171,26 +173,28 @@
                     </ul>
                 </div>
             </div>
+            <br>
+            <br>
+            <div id="slider"></div>
         </div>
     </div>
 
     <div id="container_machine_learning_controls">
-        <h4>Machine Learning parameters</h4>
+        <h4>Machine Learning controls</h4>
         <div class="btn-group btn-group-lg dropup">
-            <button id="mlRecord" type="button" class="btn btn-secondary" onclick=" togRecord()">
-                     <i class="glyphicon glyphicon-record" ng-class="{orangerecordPending(), red: recording()}"></i>
-                     <span class="hotkey">R</span>ecord
-                 </button>
-            <button id="train" style="text-align:left" type="button" class="btn btn-secondary" onclick="trainMe()">
-                     <span>&#9654;</span>
-                     <span><i class="glyphicon glyphicon-pause"></i>
-                     </span>
-                     <span class="hotkey">T</span>rain
-                 </button>
-            <button id="run" type="button" class="btn btn-secondary" onclick="togRun()">
-                     <span style="margin-top: -2px; display: inline-block;     vertical-align: top;">[ ]</span>
-                     <span class="hotkey">R</span>un
-                 </button>
+            <button id="mlRecord" type="button" class="btn btn-outline-danger" data-toggle="button" aria-pressed="false" onclick=" togRecord()">
+                        <span><i class="glyphicon glyphicon-pause">[|||]</i></span>
+                        <span class="hotkey">R</span>ecord
+            </button>
+            <button id="train" style="text-align:left" type="button" class="btn btn-outline-warning" data-toggle="button" aria-pressed="false" onclick="trainMe()">
+                    <span><i>[&#9638;]</i></span>
+                    <span class="hotkey">T</span>rain
+            </button>
+            <button id="run" type="button" class="btn btn-outline-success" data-toggle="button" aria-pressed="false" onclick="togRun()">
+    					<span>&#9654;</span>
+    					<span><i class="glyphicon glyphicon-pause"></i></span>
+       				<span class="hotkey">R</span>un
+          </button>
         </div>
     </div>
 
@@ -213,8 +217,8 @@
             </div>
             <div>
                 <label for="lfoSlider">lfo rate:</label>
-                <input id="lfoSlider" name="lfoSlider" min="0" max="10" step="0.1" value="4" type="range" autocomplete="off" oninput="lfoOutput.value = lfoSlider.value">
-                <output id="lfoOutput">4</output>
+                <input id="lfoSlider" name="lfoSlider" min="0" max="10" step="0.1" value="3.7" type="range" autocomplete="off" oninput="lfoOutput.value = lfoSlider.value">
+                <output id="lfoOutput">3.7</output>
             </div>
             <div>
                 <label for="lfoSlider">lfo amount:</label>
@@ -232,8 +236,8 @@
                 <output id="volOutput">1</output>
             </div>
         </div>
-        <div style="display: inline-block; margin:0 15px 0 0;">  </div>
-        <div id="container_sampler_controls" class="audio_control_blocks" >
+        <div style="display: inline-block; margin:0 15px 0 0;"> </div>
+        <div id="container_sampler_controls" class="audio_control_blocks">
             <h5>Sampler Controls</h5>
             <div>
                 <div style="display: inline-block;">
@@ -249,7 +253,7 @@
                     </div>
                 </div>
                 <div style="display: inline-block;">
-                      <button type="button" class="btn btn-secondary" onclick="randomize()">Randomize</button>
+                    <button type="button" class="btn btn-secondary" onclick="randomize()">Randomize</button>
                 </div>
             </div>
             <br>
@@ -345,28 +349,28 @@
                     <br>
                     <input id="mSlider" class="vertical_slider" name="mSlider" min="1" max="16" step="1" value="13" type="range" autocomplete="off" oninput="mOutput.value = mSlider.value">
                     <br>
-                    <output id="mOutput">1</output>
+                    <output id="mOutput">13</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="nSlider">14</label>
                     <br>
                     <input id="nSlider" class="vertical_slider" name="nSlider" min="1" max="16" step="1" value="14" type="range" autocomplete="off" oninput="nOutput.value = nSlider.value">
                     <br>
-                    <output id="nOutput">13</output>
+                    <output id="nOutput">14</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="oSlider">15</label>
                     <br>
                     <input id="oSlider" class="vertical_slider" name="oSlider" min="1" max="16" step="1" value="15" type="range" autocomplete="off" oninput="oOutput.value = oSlider.value">
                     <br>
-                    <output id="oOutput">14</output>
+                    <output id="oOutput">15</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="pSlider">16</label>
                     <br>
                     <input id="pSlider" class="vertical_slider" name="pSlider" min="1" max="16" step="1" value="16" type="range" autocomplete="off" oninput="pOutput.value = pSlider.value">
                     <br>
-                    <output id="pOutput">17</output>
+                    <output id="pOutput">16</output>
                 </div>
             </div>
         </div>
@@ -392,8 +396,9 @@
     /////////////////////////////////////////MAXI
 
     var maxiAudio = new maximJs.maxiAudio();
+    // set up sampler
     var sample = new maximJs.maxiSample();
-
+    // set up fm synth, filter and LFO
     var myBass = new maximJs.maxiOsc();
     var myFilter = new maximJs.maxiFilter();
     var myLFO = new maximJs.maxiOsc();
@@ -401,11 +406,11 @@
 
 
     maxiAudio.init();
-
+    // which sample are we loading
     // maxiAudio.loadSample('jongly.wav', sample);
     //maxiAudio.loadSample('amen_full.wav', sample);
     maxiAudio.loadSample('amen_short.wav', sample);
-
+    // slider vals
     var mvSlider = document.getElementById("mvSlider");
     var mvOutput = document.getElementById("mvOutput");
 
@@ -468,97 +473,83 @@
     var volSlider = document.getElementById("volSlider");
 
     var modCount = 1;
-
+    // samplelength is hardcoded. Each slice is 1/16 of the length
     var start = 1;
     //var sampleLength = 124439;
     var sampleLength = 151064;
     // var sampleLength = 292658;
     var slice = sampleLength / 16;
     var currentCount = 0;
-
+    // start clock
     var clock = new maximJs.maxiClock();
     clock.setTicksPerBeat(4);
 
     //  clock.setTempo(85.046 * speedSlider.value);
     clock.setTempo(70 * speedSlider.value);
 
-
     maxiAudio.play = function() {
 
         clock.ticker();
-
+        // each of the 16 slices is associated with a slider position.
+        // to play loop, count through 16 sliders playing the slice associated with its position
         if (clock.tick) {
             currentCount++;
             modCount = currentCount % 16;
         }
 
-        if (modCount == 1) {
+        if (modCount === 0) {
             start = aSlider.value;
         }
-        if (modCount == 2) {
+        if (modCount == 1) {
             start = bSlider.value;
         }
-        if (modCount == 3) {
+        if (modCount == 2) {
             start = cSlider.value;
         }
-        if (modCount == 4) {
+        if (modCount == 3) {
             start = dSlider.value;
         }
-        if (modCount == 5) {
+        if (modCount == 4) {
             start = eSlider.value;
         }
-        if (modCount == 6) {
+        if (modCount == 5) {
             start = fSlider.value;
         }
-        if (modCount == 7) {
+        if (modCount == 6) {
             start = gSlider.value;
         }
-        if (modCount == 8) {
+        if (modCount == 7) {
             start = hSlider.value;
         }
-        if (modCount == 9) {
+        if (modCount == 8) {
             start = iSlider.value;
         }
-        if (modCount == 10) {
+        if (modCount == 9) {
             start = jSlider.value;
         }
-        if (modCount == 11) {
+        if (modCount == 10) {
             start = kSlider.value;
         }
-        if (modCount == 12) {
+        if (modCount == 11) {
             start = lSlider.value;
         }
-        if (modCount == 13) {
+        if (modCount == 12) {
             start = mSlider.value;
         }
-        if (modCount == 14) {
+        if (modCount == 13) {
             start = nSlider.value;
         }
-        if (modCount == 15) {
+        if (modCount == 14) {
             start = oSlider.value;
         }
-        if (modCount == 16) {
+        if (modCount == 15) {
             start = pSlider.value;
         }
 
-        //var steps = stepsSlider.value;
-        // var steps = 1;
-
-        //   var start = (startSlider.value * slice);
-        //var start = (modCount * slice);
-
-
-        //
-        //  var speedfactor = speedSlider.value;
-        //  var loopLength = (slice / steps);
-        //  var loopLength = slice;
-        // var speed = (steps * 4);
-        //  var speed = 4;
+        // start position changes according to slice. glitch slider causes slices to loop segments
         var loopStart = (start - 1) * slice;
         var steps = stepsSlider.value;
-
         var loopEnd = (loopStart + loopLength);
-
         var loopLength = (slice / steps);
         var speed = (steps * 4) * speedSlider.value;
         var loopEnd = (loopStart + loopLength);
@@ -569,7 +560,7 @@
         if (sample.isReady()) {
 
             var masterVolume = parseFloat(mvSlider.value);
-
+            // filter and lfo
             var LFOfreq = parseFloat(lfoSlider.value);
             var lfoAmount = parseFloat(lfoAmountSlider.value);
             var LFO = myLFO.sinewave(LFOfreq) * lfoAmount;
@@ -579,16 +570,12 @@
             var vol = parseFloat(volSlider.value);
 
 
-            // var oscOutput = vol * (myHarmonic.saw(bassFreq * 2) + myBass.square(bassFreq));
+            // fm synth gets filtered
             var modulation = 2000 * myHarmonic.sinewave(cFreq * 8);
             var oscOutput = vol * myBass.saw((cFreq + modulation));
-            //  var oscOutput = vol * myBass.pulse((cFreq + modulation), 0.1);
             var res = parseFloat(qSlider.value);
             var filter = LFO + (2 * cFreq);
             var myFilteredOutput = myFilter.lores(oscOutput, filter, res);
-            //	var cFreq = 300;
-            // var res = 8;
-            //	var myFilteredOutput = myFilter.lores(oscOutput, cFreq, res);
             this.output = (sample.play(speed, loopStart, loopEnd) + myFilteredOutput) * masterVolume;
 
         }
@@ -657,9 +644,9 @@
 
     // This creates a 2d drawing 'context' in your canvas
     // All your drawing will be done in this canvas
-    var context = canvas.getContext("2d");
+    // var context = canvas.getContext("2d");
     //This tells the browser to get the mouse information from the function we've called getMouse
-    window.addEventListener('mousemove', getLeapData, false);
+    // window.addEventListener('mousemove', getLeapData, false);
     window.addEventListener('keydown', this.check, false);
 
 
@@ -768,37 +755,37 @@
     //      speed =  -1;
     //  }
 
-    /////////////////Drawing
-    function draw() {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        //record state
-        context.font = "16px Verdana";
-        context.fillStyle = "#00FF00";
-        if (recordState) {
-            context.fillText('RECORDING! (x)', 20, 100);
-        } else {
-            context.fillText('x = record', 20, 100);
-        }
-        if (trained) {
-            context.fillText('(T)RAINED!', 20, 120);
-        } else {
-            context.fillText('t = train', 20, 120);
-        }
-        if (runState) {
-            context.fillText('(R)UNNING!', 20, 140);
-        } else {
-            context.fillText('r = run', 20, 140);
-        }
-        //output
-        context.fillText('regression output: ' + regressionOutput, 20, 220);
-
-        //mouse coordinates
-        context.font = "14px Verdana";
-        context.fillText('(' + mouseX + ', ' + mouseY + ')', 20, canvas.height - 50);
-
-        window.requestAnimationFrame(draw);
-    }
-    window.requestAnimationFrame(draw);
+    // /////////////////Drawing
+    // function draw() {
+    //     context.clearRect(0, 0, canvas.width, canvas.height);
+    //     //record state
+    //     context.font = "16px Verdana";
+    //     context.fillStyle = "#00FF00";
+    //     if (recordState) {
+    //         context.fillText('RECORDING! (x)', 20, 100);
+    //     } else {
+    //         context.fillText('x = record', 20, 100);
+    //     }
+    //     if (trained) {
+    //         context.fillText('(T)RAINED!', 20, 120);
+    //     } else {
+    //         context.fillText('t = train', 20, 120);
+    //     }
+    //     if (runState) {
+    //         context.fillText('(R)UNNING!', 20, 140);
+    //     } else {
+    //         context.fillText('r = run', 20, 140);
+    //     }
+    //     //output
+    //     context.fillText('regression output: ' + regressionOutput, 20, 220);
+    //
+    //     //mouse coordinates
+    //     context.font = "14px Verdana";
+    //     context.fillText('(' + mouseX + ', ' + mouseY + ')', 20, canvas.height - 50);
+    //
+    //     window.requestAnimationFrame(draw);
+    // }
+    // window.requestAnimationFrame(draw);
 
 
     /*******************************************************************************************************************************************************************/
@@ -820,12 +807,10 @@
     var frameData = document.getElementById('frameData');
     var handData = document.getElementById('handData');
     var handBlocks = document.getElementById('handBlocks');
+    var handData0 = document.getElementById('handData0');
     var handData1 = document.getElementById('handData1');
-    var handData2 = document.getElementById('handData2');
     var pointableData = document.getElementById('pointableData');
     var slider = document.getElementById('slider');
-
-
 
     // Setup Leap loop with frame callback function
     var controllerOptions = {
@@ -854,14 +839,14 @@
 
                 var hand = frame.hands[i];
 
-                handString += "<div id=&quot;handData" + i + "&quot; class=&quot;block_leap_info&quot;></div>";
+                handString += "<div id=&quot;handData" + i + "!&quot; class=!&quot;block_leap_info!&quot;></div>";
                 handString += "Hand ID: " + hand.id + "<br />";
                 handString += "Direction: " + vectorToString(hand.direction, 2) + "<br />";
                 handString += "Palm normal: " + vectorToString(hand.palmNormal, 2) + "<br />";
                 handString += "Palm position: " + vectorToString(hand.palmPosition) + " mm<br />";
                 handString += "Palm velocity: " + vectorToString(hand.palmVelocity) + " mm/s<br />";
                 handString += "Sphere center: " + vectorToString(hand.sphereCenter) + " mm<br />";
-                handString += "Sphere radius: " + hand.sphereRadius.toFixed(1) + " mm<br /><br />";
+                handString += "Sphere radius: " + hand.sphereRadius.toFixed(1) + " mm<br />";
 
                 // Quick and dirty hack
                 if (i === 0) {
@@ -974,6 +959,7 @@
             // updateSliderRange(0, window.controller.plugins.playback.player.recording.frameCount);
             // slider.noUiSlider.set(0, window.controller.plugins.playback.player.recording.frameCount);
             slider.style.visibility = 'visible';
+            slider.style.zIndex = 1;
             mode = 'stop';
         }
         // this.setState({isTracking: (! this.state.isTracking )});
@@ -1005,5 +991,4 @@
         console.log('cropped frames count: ' + arrayOfFrames.length);
     }
 </script>
-
 </html>
