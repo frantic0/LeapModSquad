@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Simple Rapid API</title>
+    <title>Leap ModSquad</title>
     <style>
         /*canvas {*/
         /*    background: rgb(54, 75, 85);*/
@@ -97,11 +97,11 @@
         }
     </style>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://www.doc.gold.ac.uk/~fbern010/noUiSlider/nouislider.min.css">
+    <link rel="stylesheet" type="text/css" href="https://www.doc.gold.ac.uk/~fbern010/noUiSlider/nouislider.min.css">
     <script src="https://www.doc.gold.ac.uk/~fbern010/noUiSlider/nouislider.min.js"></script>
 
 </head>
@@ -137,46 +137,47 @@
         </div>
     </div>
 
-    <div id="container_leap_controls">
-        <h4>Leap Controls</h4>
-        <div style="margin:60 60 60 60;">
-            <div id="buttons_container">
-                <div class="btn-group btn-group-lg dropup">
-                    <button id="record" type="button" class="btn btn-outline-danger" data-toggle="button" aria-pressed="false" onclick="onRecordClick()">
-                       <span>&#9673;</span>
-                     <i class="glyphicon glyphicon-record" ng-class="{orangerecordPending(), red: recording()}"></i>
-                     <span class="hotkey">R</span>ecord
-                 </button>
-                     <span style="margin-top: -2px; display: inline-block;     vertical-align: top;">[ ]</span>
-                     <span class="hotkey">C</span>rop
-                 </button>
-                    <button style="text-align:left" type="button" class="btn btn-secondary" onclick="onPlayClick()">
-                     <span>&#9654;</span>
-                     <span><i class="glyphicon glyphicon-pause"></i>
-                     </span>
-                     <span class="hotkey">P</span>layback
-                 </button>
-                </div>
-                <div class="btn-group btn-group-lg dropup">
-                    <button type="button" class="btn btn-secondary" ng-click="save()">Upload</button>
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
-                                   <span class="caret"></span>
-                              </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <a href="#" onclick="save()"><b>Compressed</b></a>
-                        </li>
-                        <li>
-                            <a href="#" ng-click="save('json')">As JSON</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <br>
-            <br>
-            <div id="slider"></div>
-        </div>
-    </div>
+    <!--<div id="container_leap_controls">-->
+    <!--    <h4>Leap Controls</h4>-->
+    <!--    <div style="margin:60 60 60 60;">-->
+    <!--        <div id="buttons_container">-->
+    <!--            <div class="btn-group btn-group-lg dropup">-->
+    <!--                <button id="record" type="button" class="btn btn-outline-danger" data-toggle="button" aria-pressed="false" onclick="onRecordClick()">-->
+    <!--                   <span>&#9673;</span>-->
+    <!--                 <i class="glyphicon glyphicon-record" ng-class="{orangerecordPending(), red: recording()}"></i>-->
+    <!--                 <span class="hotkey">R</span>ecord-->
+    <!--             </button>-->
+    <!--                <button id="crop" type="button" class="btn btn-secondary" onclick="onCropClick()">-->
+    <!--                 <span style="margin-top: -2px; display: inline-block;     vertical-align: top;">[ ]</span>-->
+    <!--                 <span class="hotkey">C</span>rop-->
+    <!--             </button>-->
+    <!--                <button style="text-align:left" type="button" class="btn btn-secondary" onclick="onPlayClick()">-->
+    <!--                 <span>&#9654;</span>-->
+    <!--                 <span><i class="glyphicon glyphicon-pause"></i>-->
+    <!--                 </span>-->
+    <!--                 <span class="hotkey">P</span>layback-->
+    <!--             </button>-->
+    <!--            </div>-->
+    <!--            <div class="btn-group btn-group-lg dropup">-->
+    <!--                <button type="button" class="btn btn-secondary" ng-click="save()">Upload</button>-->
+    <!--                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">-->
+    <!--                               <span class="caret"></span>-->
+    <!--                          </button>-->
+    <!--                <ul class="dropdown-menu" role="menu">-->
+    <!--                    <li>-->
+    <!--                        <a href="#" onclick="save()"><b>Compressed</b></a>-->
+    <!--                    </li>-->
+    <!--                    <li>-->
+    <!--                        <a href="#" ng-click="save('json')">As JSON</a>-->
+    <!--                    </li>-->
+    <!--                </ul>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--        <br>-->
+    <!--        <br>-->
+    <!--        <div id="slider"></div>-->
+    <!--    </div>-->
+    <!--</div>-->
 
     <div id="container_machine_learning_controls">
         <h4>Machine Learning controls</h4>
@@ -374,15 +375,15 @@
             </div>
         </div>
     </div>
-
-
 </body>
 
 <script src="https://www.doc.gold.ac.uk/eavi/rapidmix/RapidLib.js"></script>
 
+<!--DEBUG Leap plugins -->
+<!--<script src="https://js.leapmotion.com/leap-plugins-0.1.12.js"></script>-->
 <script src="https://js.leapmotion.com/leap-0.6.4.min.js"></script>
-<!-- <script src="https://js.leapmotion.com/leap-plugins-0.1.12.min.js"></script> -->
-<script src="https://js.leapmotion.com/leap-plugins-0.1.12.js"></script>
+<script src="https://js.leapmotion.com/leap-plugins-0.1.12.min.js"></script>
+
 <script src="https://js.leapmotion.com/leap-plugins-0.1.12-utils.min.js"></script>
 <script src="https://js.leapmotion.com/leap-widgets-0.1.0.min.js"></script>
 <script src="https://js.leapmotion.com/leap.rigged-hand-0.1.7.min.js"></script>
@@ -403,16 +404,16 @@
     var myLFO = new maximJs.maxiOsc();
     var myHarmonic = new maximJs.maxiOsc();
 
-
     maxiAudio.init();
     // which sample are we loading
     // maxiAudio.loadSample('jongly.wav', sample);
     //maxiAudio.loadSample('amen_full.wav', sample);
     maxiAudio.loadSample('amen_short.wav', sample);
+
     // slider vals
+    // Master Volume Slider
     var mvSlider = document.getElementById("mvSlider");
     var mvOutput = document.getElementById("mvOutput");
-
 
     var aSlider = document.getElementById("aSlider");
     var aOutput = document.getElementById("aOutput");
@@ -471,6 +472,7 @@
     var lfoAmountSlider = document.getElementById("lfoAmountSlider");
     var volSlider = document.getElementById("volSlider");
 
+
     var modCount = 1;
     // samplelength is hardcoded. Each slice is 1/16 of the length
     var start = 1;
@@ -483,7 +485,7 @@
     var clock = new maximJs.maxiClock();
     clock.setTicksPerBeat(4);
 
-    //  clock.setTempo(85.046 * speedSlider.value);
+    //  clock.setTempo(85.046 * speedSlider.value)pre;
     clock.setTempo(70 * speedSlider.value);
 
     maxiAudio.play = function() {
@@ -495,6 +497,7 @@
             currentCount++;
             modCount = currentCount % 16;
         }
+
 
         if (modCount === 0) {
             start = aSlider.value;
@@ -672,6 +675,7 @@
         // console.log(this.hand2direction);
 
         if (recordState) {
+
             var rapidInput = [this.hand1direction[0], this.hand1direction[1], this.hand1direction[2]];
             var rapidOutput = [(aSlider.value), (bSlider.value), (cSlider.value), (dSlider.value), (eSlider.value), (fSlider.value), (gSlider.value), (hSlider.value), (iSlider.value), (jSlider.value), (kSlider.value), (lSlider.value), (mSlider.value),
                 (nSlider.value), (oSlider.value), (pSlider.value), (stepsSlider.value), (speedSlider.value), (cfSlider.value), (qSlider.value), (lfoSlider.value), (lfoAmountSlider.value), (volSlider.value)
@@ -824,7 +828,10 @@
         return "(" + vector[0].toFixed(digits) + ", " + vector[1].toFixed(digits) + ", " + vector[2].toFixed(digits) + ")";
     }
 
-    var hand1direction, hand2direction;
+    var backgroundData = [1.0, 1.0, 1.0];
+    var hand1direction = backgroundData;
+    var hand2direction = backgroundData;
+
 
     Leap.loop(controllerOptions, function(frame) {
 
@@ -838,7 +845,7 @@
 
                 var hand = frame.hands[i];
 
-                handString += "<div id=&quot;handData" + i + "!&quot; class=!&quot;block_leap_info!&quot;></div>";
+                handString += "<div id=&quot;handData" + i + "&quot; class=&quot;block_leap_info&quot;></div>";
                 handString += "Hand ID: " + hand.id + "<br />";
                 handString += "Direction: " + vectorToString(hand.direction, 2) + "<br />";
                 handString += "Palm normal: " + vectorToString(hand.palmNormal, 2) + "<br />";
@@ -850,6 +857,7 @@
                 // Quick and dirty hack
                 if (i === 0) {
                     hand1direction = hand.direction;
+
                     // handData1.innerHTML = handString;
                     // handString = "";
                 } else {
@@ -859,8 +867,12 @@
             }
             handData.style.visibility = "visible";
         } else {
+            hand1direction = backgroundData;
+            hand2direction = backgroundData;
             handData.style.visibility = "hidden";
         }
+
+        console.log(hand1direction);
 
         handBlocks.innerHTML = handString;
 
@@ -990,4 +1002,5 @@
         console.log('cropped frames count: ' + arrayOfFrames.length);
     }
 </script>
+
 </html>
