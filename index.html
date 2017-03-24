@@ -31,7 +31,7 @@
             position: absolute;
             width: auto;
             height: auto;
-            top: 5%;
+            top: 7%;
             left: 2%;
             z-index: 1;
         }
@@ -51,29 +51,72 @@
             position: absolute;
             width: auto;
             height: auto;
-            top: 75%;
-            left: 30%;
-            z-index: 2;
+            top: 60%;
+            left: 42%;
+            z-index: 3;
         }
 
-        #container_audio_controls {
+        /*#container_audio_controls {
             margin: 0 20 0 0;
             position: absolute;
             width: 100%;
             height: 100%;
-            top: 20%;
+            top: 10%;
             left: 45%;
             z-index: 0;
+        }*/
+
+        #container_master_controls
+        {
+
+          margin: 0 20 0 0;
+          position: absolute;
+          width: auto;
+          height: auto;
+          top: 40%;
+          left: 42%;
+          z-index: 2;
+        }
+
+        #container_synth_controls
+        {
+
+          margin: 0 20 0 0;
+          position: absolute;
+          width: auto;
+          height: auto;
+          top: 7%;
+          left: 42%;
+          z-index: 0;
+        }
+
+
+
+        #container_sampler_controls
+        {
+          margin: 0 20 0 0;
+          position: absolute;
+          width: auto;
+          height: auto;
+          top: 7%;
+          left: 65%;
+          z-index: 0;
+
         }
 
         #slider {
             z-index: 1;
         }
 
-        .fast .toggle-group { transition: left 0.1s; -webkit-transition: left 0.05s; }
+        .fast .toggle-group  {
+            transition: left 0.08s;
+            -webkit-transition: left 0.08s;
+        }
+
+
 
         .audio_control_blocks {
-            display: inline-block;
+            /*display: inline-block;*/
             padding: 0 10px 0 10px;
         }
 
@@ -91,6 +134,19 @@
             -webkit-appearance: slider-vertical;
             width: 18px;
             margin: 0 4 0 0;
+        }
+
+        .horizontal_slider_block {
+            width: auto;
+            vertical-align: middle;
+            height: 15px;
+            display: inline-block;
+        }
+
+        .horizontal_slider {
+            width: auto;
+            float: left;
+            vertical-align: middle;
         }
 
         .block_leap_info {
@@ -131,7 +187,7 @@
     <canvas></canvas>
 
     <div id="container_leap_protocol">
-        <h5>LeapMotion Protocol</h5>
+        <h4>Sensor Data (Leap Motion)</h4>
         <div id="main">
             <h6>Frame data:</h6>
             <div id="frameData"></div>
@@ -201,51 +257,30 @@
 
     <div id="container_machine_learning_controls">
         <h4>Machine Learning controls</h4>
-        <div >
+        <div>
             <!-- <button id="mlRecord" type="button" class="btn btn-outline-danger" data-toggle="button" aria-pressed="false" onclick=" togRecord()">
                         <span><i class="glyphicon glyphicon-pause">[|||]</i></span>
                         <span class="hotkey">R</span>ecord
             </button> -->
 
-            <input  id="toggle-record" type="checkbox"
-                    type="checkbox" data-toggle="toggle"
-                    data-width="120" data-height="70"
-                    checked data-toggle="toggle"
-                    data-on="<span>&#9711;</span> RECORD"
-                    data-off="<span>&#9711;</span> RECORD"
-                    data-onstyle="danger"
-                    data-class="fast"
-                    >
+            <input id="toggle-record" type="checkbox" type="checkbox" data-toggle="toggle" data-width="140" data-height="70" checked data-toggle="toggle" data-on="<span>&#9711;</span> RECORDING" data-off="<span>&#9711;</span> RECORD" data-onstyle="danger" data-style="fast">
 
-            <input id="toggle-train"
-                    type="checkbox"
-                    data-width="120" data-height="70"
-                    checked data-toggle="toggle"
-                    data-on="<span>&#9634;</span>  TRAIN"
-                    data-off="<span>&#9634;</span>  TRAIN"
-                    data-class="fast"
-                    data-onstyle="warning"
-                    >
 
-            <input id="toggle-run"
-                    type="checkbox"
-                    data-width="120" data-height="70"
-                    checked data-toggle="toggle"
-                    data-on="<span>&#9655;</span> RUN"
-                    data-off="<span>&#9655;</span> RUN"
-                    data-class="fast"
-                    data-onstyle="success"
-                    >
+            <input id="toggle-train" type="checkbox" data-width="140" data-height="70" checked data-toggle="toggle" data-on="<span>&#9634;</span>  TRAINING" data-off="<span>&#9634;</span>  TRAIN" data-style="fast" data-onstyle="warning" >
+
+            <input id="toggle-run" type="checkbox" data-width="140" data-height="70" checked data-toggle="toggle" data-on="<span>&#9655;</span> RUNNING" data-off="<span>&#9655;</span> RUN" data-style="fast" data-onstyle="success">
         </div>
     </div>
 
-    <div id="container_audio_controls">
+    <!-- <div id="container_audio_controls"> -->
         <div id="container_master_controls" class="audio_control_blocks">
             <h4>Audio Controls</h4>
             <div>
                 <label for="mvSlider">master volume:</label>
-                <input id="mvSlider" name="mvSlider" min="0" max="1" step="0.01" value="0" type="range" autocomplete="off" oninput="mvOutput.value = mvSlider.value">
-                <output id="mvOutput">0</output>
+                <div class="horizontal_slider_block">
+                    <input id="mvSlider" name="mvSlider" class="horizontal_slider" min="0" max="1" step="0.01" value="0" type="range" autocomplete="off" oninput="mvOutput.value = mvSlider.value">
+                    <output id="mvOutput">0</output>
+                </div>
             </div>
         </div>
 
@@ -253,58 +288,65 @@
             <h4>Synth Controls</h4>
             <div>
                 <label for="cfSlider">frequency:</label>
-                <input id="cfSlider" name="cfSlider" min="70" max="180" step="0.5" value="146" type="range" autocomplete="off" oninput="cfOutput.value = cfSlider.value">
-                <output id="cfOutput">146</output>
+                <div class="horizontal_slider_block">
+                    <input id="cfSlider" name="cfSlider" class="horizontal_slider" min="70" max="180" step="0.5" value="146" type="range" autocomplete="off" oninput="cfOutput.value = cfSlider.value">
+                    <output id="cfOutput">146</output>
+                </div>
             </div>
             <div>
                 <label for="lfoSlider">lfo rate:</label>
-                <input id="lfoSlider" name="lfoSlider" min="0" max="10" step="0.1" value="3.7" type="range" autocomplete="off" oninput="lfoOutput.value = lfoSlider.value">
-                <output id="lfoOutput">3.7</output>
+                <div class="horizontal_slider_block">
+                    <input id="lfoSlider" name="lfoSlider" class="horizontal_slider" min="0" max="10" step="0.1" value="3.7" type="range" autocomplete="off" oninput="lfoOutput.value = lfoSlider.value">
+                    <output id="lfoOutput">3.7</output>
+                </div>
             </div>
             <div>
                 <label for="lfoSlider">lfo amount:</label>
-                <input id="lfoAmountSlider" name="lfoAmountSlider" min="0" max="80" step="0.1" value="40" type="range" autocomplete="off" oninput="lfoAmountOutput.value = lfoAmountSlider.value">
-                <output id="lfoAmountOutput">40</output>
+                <div class="horizontal_slider_block">
+                    <input id="lfoAmountSlider" name="lfoAmountSlider" class="horizontal_slider" min="0" max="80" step="0.1" value="40" type="range" autocomplete="off" oninput="lfoAmountOutput.value = lfoAmountSlider.value">
+                    <output id="lfoAmountOutput">40</output>
+                </div>
             </div>
             <div>
                 <label for="qSlider">resonance:</label>
-                <input id="qSlider" name="qSlider" min="0" max="15" step="0.5" value="8" type="range" autocomplete="off" oninput="qOutput.value = qSlider.value">
-                <output id="qOutput">8</output>
+                <div class="horizontal_slider_block">
+                    <input id="qSlider" name="qSlider" class="horizontal_slider" min="0" max="15" step="0.5" value="8" type="range" autocomplete="off" oninput="qOutput.value = qSlider.value">
+                    <output id="qOutput">8</output>
+                </div>
             </div>
             <div>
                 <label for="volSlider">vol:</label>
-                <input id="volSlider" name="volSlider" min="0" max="1" step="0.01" value="1" type="range" autocomplete="off" oninput="volOutput.value = volSlider.value">
-                <output id="volOutput">1</output>
+                <div class="horizontal_slider_block">
+                    <input id="volSlider" name="volSlider" class="horizontal_slider" min="0" max="1" step="0.01" value="1" type="range" autocomplete="off" oninput="volOutput.value = volSlider.value">
+                    <output id="volOutput">1</output>
+                </div>
             </div>
         </div>
 
 
         <div id="container_sampler_controls" class="audio_control_blocks">
             <h4>Sampler Controls</h4>
-            <div >
-                <div>
+            <div style="display: inline-block;">
+                <div >
                     <div>
-                      <label for="speedSlider">speed</label>
-                      <div style="vertical-align: middle; height: 15px; display: inline-block; width: 150px;">
-                        <input id="speedSlider" style="float: left; vertical-align: middle;"  name="speedSlider" min="0.1" max="2" step="0.1" value="1" type="range" autocomplete="off" oninput="speedOutput.value = speedSlider.value">
-                      </div>
-                      <output id="speedOutput" style="vertical-align: middle;" >1</output>
+                        <label for="speedSlider">speed</label>
+                        <div class="horizontal_slider_block">
+                            <input id="speedSlider" class="horizontal_slider" name="speedSlider" min="0.1" max="2" step="0.1" value="1" type="range" autocomplete="off" oninput="speedOutput.value = speedSlider.value">
+                            <output id="speedOutput">1</output>
+                        </div>
                     </div>
                     <div>
-                      <label for="stepsSlider">glitches</label>
-                      <div class="block_horizontal_slider">
-                        <input id="stepsSlider" style="float: left" name="stepsSlider" min="1" max="16" step="1" value="1" type="range" autocomplete="off" oninput="stepsOutput.value = stepsSlider.value">
-                        <output id="stepsOutput">1</output>
-                      </div>
+                        <label for="stepsSlider">glitches</label>
+                        <div class="horizontal_slider_block">
+                            <input id="stepsSlider" class="horizontal_slider" name="stepsSlider" min="1" max="16" step="1" value="1" type="range" autocomplete="off" oninput="stepsOutput.value = stepsSlider.value">
+                            <output id="stepsOutput" style="text-align: center;">1</output>
+                        </div>
                     </div>
                 </div>
                 <div>
                     <button type="button" class="btn btn-default btn-lg" onclick="randomize()">Randomize</button>
                 </div>
             </div>
-
-
-
             <div>
                 <div class="block_vertical_slider">
                     <label for="aSlider1">1</label>
@@ -388,7 +430,7 @@
                 </div>
             </div>
         </div>
-    </div>
+<!-- </div> -->
 </body>
 
 
@@ -438,7 +480,7 @@
 
 
 <!-- <link href="css/bootstrap-toggle.min.css" rel="stylesheet"> -->
-<link rel="stylesheet" type="text/css" href="libs/nouislider.min.css"> -->
+<link rel="stylesheet" type="text/css" href="libs/nouislider.min.css">
 <script src="libs/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 
 
@@ -451,8 +493,6 @@
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 <script>
-
-
     /*jshint esnext: true */
 
     //alert("Slice up yer drums;");
@@ -645,8 +685,7 @@
 
         }
 
-        if(training)
-        {
+        if (training) {
             myRegression.train(myTrainingSet);
             console.log('regression trained: ');
             $('#toggle-train').bootstrapToggle('off')
@@ -776,8 +815,10 @@
     })
 
     $("#toggle-train").on("change", function() {
-        if(!training){
-          setTimeout(function(){training = true; }, 500);
+        if (!training) {
+            setTimeout(function() {
+                training = true;
+            }, 500);
         }
     })
 
