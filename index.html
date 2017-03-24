@@ -5,12 +5,6 @@
     <meta charset="utf-8">
     <title>Leap ModSquad</title>
     <style>
-        /*canvas {*/
-        /*    background: rgb(54, 75, 85);*/
-        /*    border: 1px;*/
-        /*    margin-bottom: 1em;*/
-        /*}*/
-
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
         }
@@ -57,8 +51,8 @@
             position: absolute;
             width: auto;
             height: auto;
-            top: 65%;
-            left: 35%;
+            top: 75%;
+            left: 30%;
             z-index: 2;
         }
 
@@ -67,14 +61,16 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            top: 60%;
-            left: 40%;
+            top: 20%;
+            left: 45%;
             z-index: 0;
         }
 
         #slider {
             z-index: 1;
         }
+
+        .fast .toggle-group { transition: left 0.1s; -webkit-transition: left 0.05s; }
 
         .audio_control_blocks {
             display: inline-block;
@@ -83,6 +79,12 @@
 
         .block_vertical_slider {
             display: inline-block;
+            width: 18px;
+        }
+
+        .block_horizontal_slider {
+            display: inline-block;
+            width: 50px;
         }
 
         .vertical_slider {
@@ -98,32 +100,30 @@
     </style>
 
 
-    <link rel="stylesheet" type="text/css" href="libs/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <script src="libs/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-    <script src="libs/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="libs/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="libs/nouislider.min.css">
-    <script src="libs/nouislider.min.js"></script>
-
-    <!-- Toogle button (Bootstrap plugin) -->
-    <link href="libs/bootstrap-toggle.min.css" rel="stylesheet">
-    <script src="libs/bootstrap-toggle.min.js"></script>
+    <!-- ################# REMOTE LIBS SETUP ######################## -->
 
 
+    <!-- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script> -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://www.doc.gold.ac.uk/~fbern010/noUiSlider/nouislider.min.css"> -->
+    <!-- <script src="https://www.doc.gold.ac.uk/~fbern010/noUiSlider/nouislider.min.js"></script> -->
 
-    <!--
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="https://www.doc.gold.ac.uk/~fbern010/noUiSlider/nouislider.min.css">
-    <script src="https://www.doc.gold.ac.uk/~fbern010/noUiSlider/nouislider.min.js"></script>
-    -->
 
     <!-- Toogle button (Bootstrap plugin) -->
     <!--
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script> -->
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    -->
+
+    <!-- ################# LOCAL LIBS SETUP ######################## -->
+
+
+    <!-- <link href="css/bootstrap.min.css" rel="stylesheet"> -->
+    <!-- <link href="css/bootstrap-toggle.min.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="libs/nouislider.min.css"> -->
+
 </head>
 
 <body>
@@ -201,20 +201,41 @@
 
     <div id="container_machine_learning_controls">
         <h4>Machine Learning controls</h4>
-        <div class="btn-group btn-group-lg dropup">
-            <button id="mlRecord" type="button" class="btn btn-outline-danger" data-toggle="button" aria-pressed="false" onclick=" togRecord()">
+        <div >
+            <!-- <button id="mlRecord" type="button" class="btn btn-outline-danger" data-toggle="button" aria-pressed="false" onclick=" togRecord()">
                         <span><i class="glyphicon glyphicon-pause">[|||]</i></span>
                         <span class="hotkey">R</span>ecord
-            </button>
-            <button id="train" style="text-align:left" type="button" class="btn btn-outline-warning" data-toggle="button" aria-pressed="false" onclick="trainMe()">
-                    <span><i>[&#9638;]</i></span>
-                    <span class="hotkey">T</span>rain
-            </button>
-            <button id="run" type="button" class="btn btn-outline-success" data-toggle="button" aria-pressed="false" onclick="togRun()">
-    					<span>&#9654;</span>
-    					<span><i class="glyphicon glyphicon-pause"></i></span>
-       				<span class="hotkey">R</span>un
-          </button>
+            </button> -->
+
+            <input  id="toggle-record" type="checkbox"
+                    type="checkbox" data-toggle="toggle"
+                    data-width="120" data-height="70"
+                    checked data-toggle="toggle"
+                    data-on="<span>&#9711;</span> RECORD"
+                    data-off="<span>&#9711;</span> RECORD"
+                    data-onstyle="danger"
+                    data-class="fast"
+                    >
+
+            <input id="toggle-train"
+                    type="checkbox"
+                    data-width="120" data-height="70"
+                    checked data-toggle="toggle"
+                    data-on="<span>&#9634;</span>  TRAIN"
+                    data-off="<span>&#9634;</span>  TRAIN"
+                    data-class="fast"
+                    data-onstyle="warning"
+                    >
+
+            <input id="toggle-run"
+                    type="checkbox"
+                    data-width="120" data-height="70"
+                    checked data-toggle="toggle"
+                    data-on="<span>&#9655;</span> RUN"
+                    data-off="<span>&#9655;</span> RUN"
+                    data-class="fast"
+                    data-onstyle="success"
+                    >
         </div>
     </div>
 
@@ -229,7 +250,7 @@
         </div>
 
         <div id="container_synth_controls" class="audio_control_blocks">
-            <h5>Synth Controls</h5>
+            <h4>Synth Controls</h4>
             <div>
                 <label for="cfSlider">frequency:</label>
                 <input id="cfSlider" name="cfSlider" min="70" max="180" step="0.5" value="146" type="range" autocomplete="off" oninput="cfOutput.value = cfSlider.value">
@@ -256,140 +277,113 @@
                 <output id="volOutput">1</output>
             </div>
         </div>
-        <div style="display: inline-block; margin:0 15px 0 0;"> </div>
+
+
         <div id="container_sampler_controls" class="audio_control_blocks">
-            <h5>Sampler Controls</h5>
-            <div>
-                <div style="display: inline-block;">
+            <h4>Sampler Controls</h4>
+            <div >
+                <div>
                     <div>
-                        <label for="speedSlider">speed</label>
-                        <input id="speedSlider" name="speedSlider" min="0.1" max="2" step="0.1" value="1" type="range" autocomplete="off" oninput="speedOutput.value = speedSlider.value">
-                        <output id="speedOutput">1</output>
+                      <label for="speedSlider">speed</label>
+                      <div style="vertical-align: middle; height: 15px; display: inline-block; width: 150px;">
+                        <input id="speedSlider" style="float: left; vertical-align: middle;"  name="speedSlider" min="0.1" max="2" step="0.1" value="1" type="range" autocomplete="off" oninput="speedOutput.value = speedSlider.value">
+                      </div>
+                      <output id="speedOutput" style="vertical-align: middle;" >1</output>
                     </div>
-                    <div style="margin: 0 200 0 20">
-                        <label for="stepsSlider">glitches</label>
-                        <input id="stepsSlider" name="stepsSlider" min="1" max="16" step="1" value="1" type="range" autocomplete="off" oninput="stepsOutput.value = stepsSlider.value">
+                    <div>
+                      <label for="stepsSlider">glitches</label>
+                      <div class="block_horizontal_slider">
+                        <input id="stepsSlider" style="float: left" name="stepsSlider" min="1" max="16" step="1" value="1" type="range" autocomplete="off" oninput="stepsOutput.value = stepsSlider.value">
                         <output id="stepsOutput">1</output>
+                      </div>
                     </div>
                 </div>
-                <div style="display: inline-block;">
-                    <button type="button" class="btn btn-secondary" onclick="randomize()">Randomize</button>
+                <div>
+                    <button type="button" class="btn btn-default btn-lg" onclick="randomize()">Randomize</button>
                 </div>
             </div>
-            <br>
+
+
+
             <div>
                 <div class="block_vertical_slider">
                     <label for="aSlider1">1</label>
-                    <br>
                     <input id="aSlider" class="vertical_slider" name="aSlider" min="1" max="16" step="1" value="1" type="range" autocomplete="off" oninput="aOutput.value = aSlider.value">
-                    <br>
                     <output id="aOutput">1</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="bSlider">2</label>
-                    <br>
                     <input id="bSlider" class="vertical_slider" name="bSlider" min="1" max="16" step="1" value="2" type="range" autocomplete="off" oninput="bOutput.value = bSlider.value">
-                    <br>
                     <output id="bOutput">2</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="cSlider">3</label>
-                    <br>
                     <input id="cSlider" class="vertical_slider" name="cSlider" min="1" max="16" step="1" value="3" type="range" autocomplete="off" oninput="cOutput.value = cSlider.value">
-                    <br>
                     <output id="cOutput">3</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="dSlider">4</label>
-                    <br>
                     <input id="dSlider" class="vertical_slider" name="dSlider" min="1" max="16" step="1" value="4" type="range" autocomplete="off" oninput="dOutput.value = dSlider.value">
-                    <br>
                     <output id="dOutput">4</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="eSlider">5</label>
-                    <br>
                     <input id="eSlider" class="vertical_slider" name="eSlider" min="1" max="16" step="1" value="5" type="range" autocomplete="off" oninput="eOutput.value = eSlider.value">
-                    <br>
                     <output id="eOutput">5</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="fSlider">6</label>
-                    <br>
                     <input id="fSlider" class="vertical_slider" name="fSlider" min="1" max="16" step="1" value="6" type="range" autocomplete="off" oninput="fOutput.value = fSlider.value">
-                    <br>
                     <output id="fOutput">6</output>
-                    <br>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="gSlider">7</label>
-                    <br>
                     <input id="gSlider" class="vertical_slider" name="gSlider" min="1" max="16" step="1" value="7" type="range" autocomplete="off" oninput="gOutput.value = gSlider.value">
-                    <br>
                     <output id="gOutput">7</output>
-                    <br>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="hSlider">8</label>
-                    <br>
                     <input id="hSlider" class="vertical_slider" name="hSlider" min="1" max="16" step="1" value="8" type="range" autocomplete="off" oninput="hOutput.value = hSlider.value">
-                    <br>
                     <output id="hOutput">8</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="iSlider">9</label>
-                    <br>
                     <input id="iSlider" class="vertical_slider" name="iSlider" min="1" max="16" step="1" value="9" type="range" autocomplete="off" oninput="iOutput.value = iSlider.value">
-                    <br>
                     <output id="iOutput">9</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="jSlider">10</label>
-                    <br>
                     <input id="jSlider" class="vertical_slider" name="jSlider" min="1" max="16" step="1" value="10" type="range" autocomplete="off" oninput="jOutput.value = jSlider.value">
-                    <br>
                     <output id="jOutput">10</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="kSlider">11</label>
-                    <br>
                     <input id="kSlider" class="vertical_slider" name="kSlider" min="1" max="16" step="1" value="11" type="range" autocomplete="off" oninput="kOutput.value = kSlider.value">
-                    <br>
                     <output id="kOutput">11</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="lSlider">12</label>
-                    <br>
                     <input id="lSlider" class="vertical_slider" name="lSlider" min="1" max="16" step="1" value="12" type="range" autocomplete="off" oninput="lOutput.value = lSlider.value">
-                    <br>
                     <output id="lOutput">12</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="mSlider">13</label>
-                    <br>
                     <input id="mSlider" class="vertical_slider" name="mSlider" min="1" max="16" step="1" value="13" type="range" autocomplete="off" oninput="mOutput.value = mSlider.value">
-                    <br>
                     <output id="mOutput">13</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="nSlider">14</label>
-                    <br>
                     <input id="nSlider" class="vertical_slider" name="nSlider" min="1" max="16" step="1" value="14" type="range" autocomplete="off" oninput="nOutput.value = nSlider.value">
-                    <br>
                     <output id="nOutput">14</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="oSlider">15</label>
-                    <br>
                     <input id="oSlider" class="vertical_slider" name="oSlider" min="1" max="16" step="1" value="15" type="range" autocomplete="off" oninput="oOutput.value = oSlider.value">
-                    <br>
                     <output id="oOutput">15</output>
                 </div>
                 <div class="block_vertical_slider">
                     <label for="pSlider">16</label>
-                    <br>
                     <input id="pSlider" class="vertical_slider" name="pSlider" min="1" max="16" step="1" value="16" type="range" autocomplete="off" oninput="pOutput.value = pSlider.value">
-                    <br>
                     <output id="pOutput">16</output>
                 </div>
             </div>
@@ -425,8 +419,40 @@
 <script src="libs/leap-widgets-0.1.0.min.js"></script>
 <script src="libs/leap.rigged-hand-0.1.7.min.js"></script>
 
+<!-- jQuery 1.12.4 (necessary for Bootstrap's JavaScript plugins) -->
+<!-- <script src="js/jquery.min.js"></script> -->
+
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<!-- <script src="js/bootstrap.min.js"></script> -->
+<!-- <script src="js/bootstrap-toggle.min.js"></script> -->
+<!--
+<script type="text/javascript">
+    var jq1124 = jQuery.noConflict(true);
+</script> -->
+
+<!-- <script src="libs/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script> -->
+
+
+<!-- <script src="libs/nouislider.min.js"></script> -->
+
+
+
+<!-- <link href="css/bootstrap-toggle.min.css" rel="stylesheet"> -->
+<link rel="stylesheet" type="text/css" href="libs/nouislider.min.css"> -->
+<script src="libs/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<script src="libs/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 <script>
+
+
     /*jshint esnext: true */
 
     //alert("Slice up yer drums;");
@@ -618,6 +644,16 @@
             this.output = (sample.play(speed, loopStart, loopEnd) + myFilteredOutput) * masterVolume;
 
         }
+
+        if(training)
+        {
+            myRegression.train(myTrainingSet);
+            console.log('regression trained: ');
+            $('#toggle-train').bootstrapToggle('off')
+
+            trained = true;
+            training = false;
+        }
     };
     ////////////////////////////////////RAPID API
 
@@ -627,11 +663,12 @@
 
     var myTrainingSet = [];
 
+    var training = false;
     var trained = false;
 
     function trainMe() {
-        console.log('regression trained: ', myRegression.train(myTrainingSet));
-        trained = true;
+
+        training = true;
     }
 
     var regressionOutput;
@@ -662,9 +699,8 @@
         qSlider.value = regressionOutput[19];
         lfoSlider.value = regressionOutput[20];
         lfoAmountSlider.value = regressionOutput[21];
-
-        // Note Synth vol is also controlled
         volSlider.value = regressionOutput[22];
+        mvSlider.value = regressionOutput[23];
     }
     ////////////////////////////////////CONTROLS AND INPUT
 
@@ -706,6 +742,9 @@
         }
     }
 
+    $('#toggle-record').bootstrapToggle('off')
+    $('#toggle-train').bootstrapToggle('off')
+    $('#toggle-run').bootstrapToggle('off')
 
     function getLeapData() {
         // console.log(this.hand1direction);
@@ -715,13 +754,14 @@
 
             var rapidInput = [this.hand1direction[0], this.hand1direction[1], this.hand1direction[2]];
             var rapidOutput = [(aSlider.value), (bSlider.value), (cSlider.value), (dSlider.value), (eSlider.value), (fSlider.value), (gSlider.value), (hSlider.value), (iSlider.value), (jSlider.value), (kSlider.value), (lSlider.value), (mSlider.value),
-                (nSlider.value), (oSlider.value), (pSlider.value), (stepsSlider.value), (speedSlider.value), (cfSlider.value), (qSlider.value), (lfoSlider.value), (lfoAmountSlider.value), (volSlider.value)
+                (nSlider.value), (oSlider.value), (pSlider.value), (stepsSlider.value), (speedSlider.value), (cfSlider.value), (qSlider.value), (lfoSlider.value), (lfoAmountSlider.value), (volSlider.value), (mvSlider.value)
             ];
             myTrainingSet.push({
                 input: rapidInput,
                 output: rapidOutput
             });
 
+            // console.log(rapidInput);
         }
 
         if (runState) {
@@ -731,6 +771,20 @@
         }
     }
 
+    $("#toggle-record").on("change", function() {
+        togRecord();
+    })
+
+    $("#toggle-train").on("change", function() {
+        if(!training){
+          setTimeout(function(){training = true; }, 500);
+        }
+    })
+
+    $("#toggle-run").on("change", function() {
+        togRun();
+    })
+
     var recordState;
 
     function togRecord() {
@@ -739,6 +793,7 @@
             console.log("recording!");
         } else {
             console.log("stopped recording");
+
         }
     }
 
@@ -909,7 +964,7 @@
             handData.style.visibility = "hidden";
         }
 
-        console.log(hand1direction);
+        // console.log(hand1direction);
 
         handBlocks.innerHTML = handString;
 
@@ -995,7 +1050,7 @@
                 });
 
             slider.noUiSlider.on('update', function(values, handle) {
-                console.log('values[' + handle + ']' + values[handle]);
+                // console.log('values[' + handle + ']' + values[handle]);
                 window.controller.plugins.playback.player.setFrameIndex(values[handle]);
                 if (handle === 0) {
                     window.controller.plugins.playback.player.recording.leftCrop();
@@ -1033,10 +1088,10 @@
         // }
         // this.setState({isTracking: (! this.state.isTracking )});
 
-        console.log('total frames Count: ' + window.controller.plugins.playback.player.recording.frameCount);
+        // console.log('total frames Count: ' + window.controller.plugins.playback.player.recording.frameCount);
 
         var arrayOfFrames = window.controller.plugins.playback.player.recording.croppedFrameData();
-        console.log('cropped frames count: ' + arrayOfFrames.length);
+        // console.log('cropped frames count: ' + arrayOfFrames.length);
     }
 </script>
 
